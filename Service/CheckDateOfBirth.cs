@@ -7,17 +7,32 @@ namespace Supermarket_System.Service
 {
     public static class CheckDateOfBirth
     {
-       public static bool IsDateOfBirth(DateTime dateOfBirth)
+        public static bool IsDateOfBirth(DateTime dateOfBirth, int minimumAge = 18)
         {
-            int minimumAge = 18;
-            DateTime today = DateTime.Today;
-            int Age = today.Year - dateOfBirth.Year;
-            if(dateOfBirth > today.AddYears(-Age))
+            try
             {
-                Age--;
+                // Kiểm tra ngày sinh có hợp lệ không (ví dụ: ngày, tháng, năm hợp lý)
+                if (!dateOfBirth.Date.Equals(dateOfBirth))
+                {
+                    throw new ArgumentException("Ngày sinh không hợp lệ.");
+                }
 
+                // Tính tuổi
+                int age = DateTime.Today.Year - dateOfBirth.Year;
+                if (dateOfBirth > DateTime.Today.AddYears(-age))
+                {
+                    age--;
+                }
+
+                // Kiểm tra tuổi và trả về kết quả
+                return age >= minimumAge;
             }
-            return Age >= minimumAge && dateOfBirth <= today;
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+                Console.WriteLine("Lỗi khi kiểm tra ngày sinh: " + ex.Message);
+                return false;
+            }
         }
     }
 }
