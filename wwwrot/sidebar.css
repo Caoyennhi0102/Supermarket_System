@@ -1,0 +1,72 @@
+﻿/* Sidebar Styles */
+.list-group {
+    margin-top: 10px;
+}
+
+.list-group-item {
+    cursor: pointer;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+    .list-group-item:hover {
+        background-color: #f1f1f1;
+    }
+
+.list-group-item-action {
+    background-color: #fff;
+}
+
+/* Add custom styles if needed */
+button.btn.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+
+    button.btn.btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+/* Căn chỉnh Sidebar và thêm khoảng cách cho logo */
+.sidebar {
+    background-color: #ffffff; /* Màu nền cho Sidebar */
+    padding-top: 20px; /* Khoảng cách từ trên xuống để chen logo */
+    border-right: 2px solid #66b3ff; /* Đường viền bên phải màu xanh lợt */
+    height: 100vh;
+}
+
+    /* Căn chỉnh logo */
+    .sidebar .logo img {
+        width: auto; /* Đảm bảo logo chiếm chiều rộng của sidebar */
+        height: auto;
+        margin-bottom: 20px; /* Khoảng cách giữa logo và các mục trong Sidebar */
+        max-width: 150px;
+    }
+
+    /* Kiểu dáng cho các mục trong Sidebar */
+    .sidebar .list-group-item {
+        background-color: transparent; /* Mục trong Sidebar không có màu nền */
+        border: none; /* Loại bỏ đường viền của mỗi mục */
+    }
+
+        /* Kết quả nhìn đẹp hơn */
+        .sidebar .list-group-item:hover {
+            background-color: #e9ecef; /* Thay đổi màu khi hover vào mục */
+        }
+/* Căn chỉnh nội dung chính (form) */
+.main-content {
+    padding: 20px; /* Khoảng cách cho form */
+    background-color: #66b3ff; /* Màu nền cho phần form */
+}
+/* Đường viền dọc phân tách Sidebar và form */
+.row {
+    display: flex;
+}
+.col-md-3.sidebar {
+    border-right: 2px #66b3ff; /* Đường viền dọc màu xanh lợt */
+}
+.col-md-9.main-content {
+    padding-left: 20px; /* Thêm khoảng cách cho phần form bên trái */
+}

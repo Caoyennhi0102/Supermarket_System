@@ -1,0 +1,186 @@
+﻿/* Tổng quan về form */
+.container {
+    max-width: 800px; /* Giới hạn chiều rộng của form */
+    margin: auto; /* Căn giữa form trong container */
+    padding: 20px; /* Khoảng cách bên trong */
+    background-color: #f9f9f9; /* Màu nền nhẹ nhàng cho form */
+    border-radius: 8px; /* Góc bo tròn cho form */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+}
+
+/* Tiêu đề của form */
+h2 {
+    text-align: center;
+    color: #e32b2b;
+    margin-bottom: 20px;
+}
+
+/* Căn chỉnh các thông báo lỗi/thành công */
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Các nhóm input */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Căn chỉnh nhãn */
+label {
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Các ô input và select */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+    /* Input khi focus */
+    .form-control:focus {
+        outline: none;
+        border-color: #66b3ff;
+        box-shadow: 0px 0px 5px rgba(102, 179, 255, 0.5);
+    }
+
+/* Căn chỉnh các nhóm input chọn (checkbox, radio, dropdown) */
+input[type="checkbox"], select {
+    margin-right: 10px;
+}
+
+/* Nút bấm */
+.btn-primary {
+    background-color: #66b3ff;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+    /* Nút bấm khi hover */
+    .btn-primary:hover {
+        background-color: #5599e6;
+    }
+
+/* Responsive: Khi màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        font-size: 13px;
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+/* Các thông báo lỗi và thành công */
+.alert {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+}
+
+/* Thông báo thành công */
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+    border-left: 5px solid #28a745; /* Thêm viền trái xanh lá */
+}
+
+/* Thông báo lỗi */
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+    border-left: 5px solid #dc3545; /* Thêm viền trái đỏ */
+    font-weight: bold;
+}
+
+/* Thông báo cảnh báo */
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+    border-left: 5px solid #ffc107; /* Thêm viền trái vàng */
+}
+
+/* Thông báo thông tin */
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+    border-left: 5px solid #17a2b8; /* Thêm viền trái xanh dương */
+}
+
+/* Tùy chỉnh thêm cho alert khi có icon (nếu muốn) */
+.alert i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+/* Thêm padding và đường viền cho các trường hợp alert khi focus */
+.alert:focus {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Căn chỉnh chữ cho các thông báo */
+.alert p {
+    margin-bottom: 0;
+}
+
+/* Thông báo lỗi lớn hơn */
+.alert-danger {
+    font-size: 16px;
+    padding: 20px;
+}
+
+.gender-note {
+   
+    margin-left: 10px; /* Khoảng cách giữa checkbox và văn bản */
+}
+.gender-container {
+    display: flex; /* Sử dụng flexbox để sắp xếp các phần tử ngang */
+    align-items: center; /* Căn chỉnh checkbox và văn bản cùng chiều dọc */
+}
+body {
+    background-color: #66b3ff; /* Màu nền nhẹ cho toàn bộ trang */
+}

@@ -1,0 +1,133 @@
+﻿@{
+    ViewBag.Title = "Thêm Nhân Viên";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
+}
+
+<!-- Main Content -->
+<div class="container">
+    <h2 class="text-center">Thêm Nhân Viên</h2>
+
+    <script src="/js/Addemployee.js"></script>
+    <link href="~/wwwrot/AddEmployee.css" rel="stylesheet" />
+
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+
+    @using (Html.BeginForm("Admin", "AddEmployee", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <form class="post">
+            <div class="row">
+                <!-- Họ tên -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="HoTen">Họ tên:</label>
+                        <input type="text" id="HoTen" name="nhanVien.HoTen" class="form-control" placeholder="Nhập họ tên" required />
+                    </div>
+                </div>
+                <!-- Địa chỉ -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="DiaChi">Địa chỉ:</label>
+                        <input type="text" id="DiaChi" name="nhanVien.DiaChi" class="form-control" placeholder="Nhập địa chỉ" required />
+                    </div>
+                </div>
+                <!-- Email -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Email">Email:</label>
+                        <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Số điện thoại -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="SDT">Số điện thoại:</label>
+                        <input type="text" id="SDT" name="nhanVien.SDT" class="form-control" placeholder="Nhập số điện thoại" required />
+                    </div>
+                </div>
+                <!-- Mã Bộ Phận -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="MaBoPhan">Mã Bộ Phận:</label>
+                        <select id="MaBoPhan" name="nhanVien.MaBoPhan" class="form-control" required>
+                            <option value="">Chọn bộ phận</option>
+                            <!-- Thêm các tùy chọn từ cơ sở dữ liệu -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Mã Chức Vụ -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="MaChucVu">Mã Chức Vụ:</label>
+                        <select id="MaChucVu" name="nhanVien.MaChucVu" class="form-control" required>
+                            <option value="">Chọn chức vụ</option>
+                            <!-- Thêm các tùy chọn từ cơ sở dữ liệu -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Ngày sinh -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="NgaySinh">Ngày sinh:</label>
+                        <input type="date" id="NgaySinh" name="nhanVien.NgaySinh" class="form-control" required />
+                    </div>
+                </div>
+                <!-- Vai trò -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Role">Vai trò:</label>
+                        <select id="Role" name="role" class="form-control" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Manager">Manager</option>
+                            <option value="User">User</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Trạng thái -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Status">Trạng thái:</label>
+                        <select id="Status" name="status" class="form-control" required>
+                            <option value="duyet">Kích hoạt</option>
+                            <option value="koduyet">Không kích hoạt</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ô Giới tính ở hàng dưới cùng bên trái -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="GioiTinh">Giới tính:</label>
+                        <div class="gender-container">
+                            <input type="checkbox" id="GioiTinh" name="nhanVien.GioiTinh" value="true" /> Nam
+                            <span class="gender-note"> (Lưu ý: Nam thì tích, Nữ không tích)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
+        </form>
+    }
+</div>

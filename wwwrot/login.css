@@ -1,0 +1,69 @@
+﻿body {
+    background-color: #ADD8E6; /* Màu xanh dương nhạt */
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.logo {
+    margin-bottom: 30px;
+}
+
+    .logo img {
+        width: 150px;
+        height: auto;
+    }
+
+.form-container {
+    text-align: left;
+}
+
+    .form-container div {
+        margin-bottom: 15px;
+    }
+
+    .form-container label {
+        display: block;
+        font-weight: bold;
+    }
+
+    .form-container input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .form-container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50; /* Màu xanh lá */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+}
