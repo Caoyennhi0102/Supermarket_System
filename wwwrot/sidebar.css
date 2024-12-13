@@ -22,7 +22,7 @@
 button.btn.btn-primary {
     background-color: #007bff;
     border-color: #007bff;
-    color: white;
+    color: #66b3ff;
 }
 
     button.btn.btn-primary:hover {
@@ -35,6 +35,7 @@ button.btn.btn-primary {
     padding-top: 20px; /* Khoảng cách từ trên xuống để chen logo */
     border-right: 2px solid #66b3ff; /* Đường viền bên phải màu xanh lợt */
     height: 100vh;
+    color:cornflowerblue;
 }
 
     /* Căn chỉnh logo */
@@ -47,13 +48,13 @@ button.btn.btn-primary {
 
     /* Kiểu dáng cho các mục trong Sidebar */
     .sidebar .list-group-item {
-        background-color: transparent; /* Mục trong Sidebar không có màu nền */
+        background-color: #66b3ff; /* Mục trong Sidebar không có màu nền */
         border: none; /* Loại bỏ đường viền của mỗi mục */
     }
 
         /* Kết quả nhìn đẹp hơn */
         .sidebar .list-group-item:hover {
-            background-color: #e9ecef; /* Thay đổi màu khi hover vào mục */
+            background-color: #007bff; /* Thay đổi màu khi hover vào mục */
         }
 /* Căn chỉnh nội dung chính (form) */
 .main-content {
