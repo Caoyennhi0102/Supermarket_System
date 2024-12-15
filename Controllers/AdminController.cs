@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using System.Web.Services.Description;
 
 namespace Supermarket_System.Controllers
 {
-    
+  //  [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly AdminService _adminService;
@@ -19,27 +20,32 @@ namespace Supermarket_System.Controllers
             _adminService = new AdminService(new SqlConnectionServer());
             
         }
+      /*  protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (Session["UserName"] == null)
+            {
+                filterContext.Result = RedirectToAction("Login", "Login");
+            }
+            base.OnActionExecuting(filterContext);
+        }*/
         public ActionResult Dashboard()
         {
-            return Json(new { message = "Welcome to Admin Dashboard" });
+            bool IsSessionActive = (Session["UserName"] != null);
+            ViewBag.IsSessionActive = IsSessionActive;
+            return View();
         }
-        public ActionResult logout()
+        public ActionResult LogOut()
         {
-            bool result = _adminService.LogOutAsync();
-            if (result)
-            {
-                return RedirectToAction("Admin", "Login");
-            }
-            else
-            {
-                return View("Admin");
-            }
+            FormsAuthentication.SignOut();
+            Session.Clear();
+            return RedirectToAction("Login", "Admin");
         }
 
         // GET: Admin
         [HttpGet]
         public ActionResult AddEmployee()
         {
+           
             var nhanvien = _adminService.GetAllEmployeest();
             ViewBag.employeeList = nhanvien;
             return View();

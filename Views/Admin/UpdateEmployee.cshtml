@@ -4,6 +4,12 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
 }
+@*
+@{
+    bool isSessionActive = (bool)ViewBag.IsSessionActive;
+}
+*@
+
 <div class="container">
     <h2>Cập nhật thông tin nhân viên</h2>
     <link href="~/wwwrot/UpdateEmployee.css" rel="stylesheet" />
@@ -183,6 +189,20 @@
             <button type="submit" class="btn btn-primary">Cập nhật nhân viên</button>
         </div>
     }
+    @*
+    <script>
+            $(document).ready(function () {
+                // Kiểm tra Session
+                var isSessionActive = @isSessionActive.ToString().ToLower();
+
+                // Nếu Session hết hạn, vô hiệu hóa form
+                if (!isSessionActive) {
+                    $("#myForm input, #myForm button").prop("disabled", true);
+                    alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
+                }
+            });
+    </script>
+        *@
     <h3>Danh Sách Nhân Viên</h3>
     <div class="table-container">
         <table class="table" id="employeeTable">
@@ -211,91 +231,91 @@
     </div>
 </div>
 
-    <script>
-        $(document).ready(function () {
-            $('#updateForm').submit(function (e) {
-                e.preventDefault(); // Ngừng gửi form
+<script>
+    $(document).ready(function () {
+        $('#updateForm').submit(function (e) {
+            e.preventDefault(); // Ngừng gửi form
 
-                var maNV = $('#MaNhanVien').val();
-                var maBP = $('#MaBoPhan').val();
-                var maCV = $('#MaChucVu').val();
-                var hoTen = $('#HoTen').val();
-                var cccd = $('#CCCD').val();
-                var gioiTinh = $('#GioiTinh').val();
-                var ngaySinh = $('#NgaySinh').val();
-                var diaChi = $('#DiaChi').val();
-                var sdt = $('#SDT').val();
-                var email = $('#Email').val();
-                var vaiTro = $('#VaiTro').val();
-                var userName = $('#UserName').val();
-                var trangThai = $('#TrangThai').val();
-                var ngayTao = $('#NgayTao').val();
-                var maQL = $('#MaQuanLy').val(); // Ví dụ, nếu có mã quản lý
-                var status = $('#Status').val(); // Nếu có trạng thái
+            var maNV = $('#MaNhanVien').val();
+            var maBP = $('#MaBoPhan').val();
+            var maCV = $('#MaChucVu').val();
+            var hoTen = $('#HoTen').val();
+            var cccd = $('#CCCD').val();
+            var gioiTinh = $('#GioiTinh').val();
+            var ngaySinh = $('#NgaySinh').val();
+            var diaChi = $('#DiaChi').val();
+            var sdt = $('#SDT').val();
+            var email = $('#Email').val();
+            var vaiTro = $('#VaiTro').val();
+            var userName = $('#UserName').val();
+            var trangThai = $('#TrangThai').val();
+            var ngayTao = $('#NgayTao').val();
+            var maQL = $('#MaQuanLy').val(); // Ví dụ, nếu có mã quản lý
+            var status = $('#Status').val(); // Nếu có trạng thái
 
-                $.ajax({
-                    type: 'POST',
-                    url: '/Employee/UpdateEmployee',  // URL đúng đến phương thức controller của bạn
-                    data: {
-                        updatenhanVien: {
-                            MaNhanVien: maNV,
-                            MaBoPhan: maBP,
-                            MaChucVu: maCV,
-                            HoTen: hoTen,
-                            CCCD: cccd,
-                            GioiTinh: gioiTinh,
-                            NgaySinh: ngaySinh,
-                            DiaChi: diaChi,
-                            SDT: sdt,
-                            Email: email,
-                            VaiTro: vaiTro,
-                            UserName: userName,
-                            TrangThai: trangThai,
-                            NgayTao: ngayTao
-                        },
-                        maQL: maQL,
-                        status: status
+            $.ajax({
+                type: 'POST',
+                url: '/Employee/UpdateEmployee',  // URL đúng đến phương thức controller của bạn
+                data: {
+                    updatenhanVien: {
+                        MaNhanVien: maNV,
+                        MaBoPhan: maBP,
+                        MaChucVu: maCV,
+                        HoTen: hoTen,
+                        CCCD: cccd,
+                        GioiTinh: gioiTinh,
+                        NgaySinh: ngaySinh,
+                        DiaChi: diaChi,
+                        SDT: sdt,
+                        Email: email,
+                        VaiTro: vaiTro,
+                        UserName: userName,
+                        TrangThai: trangThai,
+                        NgayTao: ngayTao
                     },
-                    success: function (response) {
-                        console.log(response); // Kiểm tra dữ liệu trả về từ server
+                    maQL: maQL,
+                    status: status
+                },
+                success: function (response) {
+                    console.log(response); // Kiểm tra dữ liệu trả về từ server
 
-                        if (response.success) {
-                            $('#searchResult').html("<p class='text-success'>" + response.message + "</p>");
-                            updateTable(response.employee);  // Cập nhật bảng
-                        } else {
-                            $('#searchResult').html("<p class='text-danger'>" + response.message + "</p>");
-                        }
-                    },
-                    error: function () {
-                        $('#searchResult').html("<p class='text-danger'>Đã xảy ra lỗi. Vui lòng thử lại.</p>");
+                    if (response.success) {
+                        $('#searchResult').html("<p class='text-success'>" + response.message + "</p>");
+                        updateTable(response.employee);  // Cập nhật bảng
+                    } else {
+                        $('#searchResult').html("<p class='text-danger'>" + response.message + "</p>");
                     }
-                });
+                },
+                error: function () {
+                    $('#searchResult').html("<p class='text-danger'>Đã xảy ra lỗi. Vui lòng thử lại.</p>");
+                }
             });
-
-            // Hàm cập nhật bảng
-            function updateTable(employee) {
-                var newRow = '<tr>' +
-                    '<td>' + employee.MaNhanVien + '</td>' +
-                    '<td>' + employee.MaBoPhan + '</td>' +
-                    '<td>' + employee.MaChucVu + '</td>' +
-                    '<td>' + employee.HoTen + '</td>' +
-                    '<td>' + employee.CCCD + '</td>' +
-                    '<td>' + employee.GioiTinh + '</td>' +
-                    '<td>' + employee.NgaySinh + '</td>' +
-                    '<td>' + employee.DiaChi + '</td>' +
-                    '<td>' + employee.SDT + '</td>' +
-                    '<td>' + employee.Email + '</td>' +
-                    '<td>' + employee.VaiTro + '</td>' +
-                    '<td>' + employee.UserName + '</td>' +
-                    '<td>' + employee.TrangThai + '</td>' +
-                    '<td>' + employee.NgayTao + '</td>' +
-                    '</tr>';
-
-                $('#employeeTable tbody').append(newRow); // Thêm dòng mới vào bảng
-            }
         });
 
-    </script>
+        // Hàm cập nhật bảng
+        function updateTable(employee) {
+            var newRow = '<tr>' +
+                '<td>' + employee.MaNhanVien + '</td>' +
+                '<td>' + employee.MaBoPhan + '</td>' +
+                '<td>' + employee.MaChucVu + '</td>' +
+                '<td>' + employee.HoTen + '</td>' +
+                '<td>' + employee.CCCD + '</td>' +
+                '<td>' + employee.GioiTinh + '</td>' +
+                '<td>' + employee.NgaySinh + '</td>' +
+                '<td>' + employee.DiaChi + '</td>' +
+                '<td>' + employee.SDT + '</td>' +
+                '<td>' + employee.Email + '</td>' +
+                '<td>' + employee.VaiTro + '</td>' +
+                '<td>' + employee.UserName + '</td>' +
+                '<td>' + employee.TrangThai + '</td>' +
+                '<td>' + employee.NgayTao + '</td>' +
+                '</tr>';
+
+            $('#employeeTable tbody').append(newRow); // Thêm dòng mới vào bảng
+        }
+    });
+
+</script>
 
 
 

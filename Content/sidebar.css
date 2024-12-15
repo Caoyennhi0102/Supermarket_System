@@ -47,3 +47,19 @@
     height: 100vh;
     overflow-y: auto; /* Kích hoạt cuộn dọc nếu cần */
 }
+/* Tùy chỉnh biểu tượng */
+.list-group-item i {
+    margin-right: 8px; /* Khoảng cách giữa icon và text */
+    font-size: 18px; /* Đổi kích thước icon */
+}
+
+/* Tùy chỉnh màu sắc nút */
+.list-group-item-action {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+    .list-group-item-action:hover {
+        background-color: #0056b3;
+    }

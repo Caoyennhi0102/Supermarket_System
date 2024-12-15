@@ -4,8 +4,11 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
 }
-
-
+@*
+@{
+    bool isSessionActive = (bool)ViewBag.IsSessionActive;
+}
+*@
 <!-- Main Content -->
 <div class="container">
     <h2 class="text-center">Thêm Nhân Viên</h2>
@@ -127,19 +130,32 @@
                     </div>
                 </div>
             </div>
-        
-        <!-- Email -->
-        <div class="col-md-4">
-            <div class="form-group mb-3">
-                <label for="Email">Email:</label>
-                <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
+
+            <!-- Email -->
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="Email">Email:</label>
+                    <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
+                </div>
             </div>
         </div>
-     </div>
         <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
 
     }
+    @*
+        <script>
+                $(document).ready(function () {
+                    // Kiểm tra Session
+                    var isSessionActive = @isSessionActive.ToString().ToLower();
 
+                    // Nếu Session hết hạn, vô hiệu hóa form
+                    if (!isSessionActive) {
+                        $("#myForm input, #myForm button").prop("disabled", true);
+                        alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
+                    }
+                });
+        </script>
+    *@
     <!-- Bảng hiển thị danh sách nhân viên -->
     <div class="table-container">
         <h3 class="mt-5">Danh Sách Nhân Viên</h3>
@@ -192,4 +208,3 @@
 
     </div>
 </div>
-  

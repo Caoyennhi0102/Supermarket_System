@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Supermarket_System.Controllers
 {
@@ -20,9 +21,10 @@ namespace Supermarket_System.Controllers
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            return View("Login");
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(string username, string password)
         {
             bool isFirstLogin;
@@ -31,7 +33,7 @@ namespace Supermarket_System.Controllers
             if(result == "Đăng Nhập Thành Công")
             { 
                 Session["UserName"] = username;
-            
+                FormsAuthentication.SetAuthCookie(username, false);
                 if (isFirstLogin)
                 {
                     return RedirectToAction("ChangeCredentials", "Index");
