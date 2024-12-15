@@ -10,6 +10,10 @@ namespace Supermarket_System.Service
     {
         public static bool IsPhoneNumberValid(string phoneNumber)
         {
+            if (!phoneNumber.All(char.IsDigit))
+            {
+                return false;
+            }
             // Định dạng số điện thoại: Bắt đầu bằng 0, dài 10-11 ký tự
             string mobilePattern = @"^0\d{9,10}$";
 

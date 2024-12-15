@@ -1,0 +1,49 @@
+﻿/* Toàn bộ container */
+.container-fluid {
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    height: 100vh; /* Chiều cao đầy đủ màn hình */
+    background-color: #f8f9fa; /* Màu nền Sidebar */
+    padding: 20px 10px; /* Thêm khoảng cách trong Sidebar */
+    color: #fff; /* Màu chữ trắng */
+}
+
+    /* Logo trong Sidebar */
+    .sidebar .logo img {
+        max-width: 80%; /* Logo chiếm tối đa 80% chiều rộng Sidebar */
+        height: auto; /* Giữ tỷ lệ hình ảnh */
+        margin-bottom: 20px; /* Khoảng cách dưới logo */
+    }
+
+    /* Danh sách menu */
+    .sidebar .list-group {
+        margin-top: 20px;
+    }
+
+    .sidebar .list-group-item {
+        background-color: #0094ff; /* Nền trong suốt */
+        color: #fff; /* Màu chữ */
+        border: 1px solid #007bff; /* Viền màu xanh */
+        border-radius: 5px; /* Bo tròn góc */
+        padding: 10px 15px;
+        font-size: 16px;
+        margin-bottom: 10px; /* Khoảng cách giữa các mục */
+    }
+
+        .sidebar .list-group-item:hover {
+            background-color: #007bff; /* Đổi nền khi hover */
+            color: #fff; /* Màu chữ khi hover */
+            border: 1px solid #0056b3; /* Đổi màu viền khi hover */
+        }
+
+/* Nội dung chính */
+.main-content {
+    padding: 20px;
+    background-color: #f8f9fa; /* Màu nền nhạt */
+    height: 100vh;
+    overflow-y: auto; /* Kích hoạt cuộn dọc nếu cần */
+}

@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Supermarket_System.Service;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Unity;
 
 namespace Supermarket_System
 {
@@ -16,6 +19,8 @@ namespace Supermarket_System
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            
+          
         }
     }
 }

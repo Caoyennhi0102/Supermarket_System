@@ -17,8 +17,9 @@ namespace Supermarket_System.Controllers
             _nhanVienService = new NhanVienService(sqlConnectionServer);
         }
         [HttpGet]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
         [HttpPost]
@@ -26,14 +27,27 @@ namespace Supermarket_System.Controllers
         {
             bool isFirstLogin;
             string result = _nhanVienService.LoginService(username, password, out isFirstLogin);
+            
             if(result == "Đăng Nhập Thành Công")
-            {
+            { 
+                Session["UserName"] = username;
+            
                 if (isFirstLogin)
                 {
                     return RedirectToAction("ChangeCredentials", "Index");
                 }
-                Session["UserName"] = username;
-                return RedirectToAction("Login", "Home");
+                var userRole = _nhanVienService.GetUserRole(username);
+                if(userRole == "Admin")
+                {
+                    return RedirectToAction("Dashboard", "Admin");
+                }else if(userRole == "Manager")
+                {
+                    return RedirectToAction("Dashboard", "Manager");
+                }
+                else
+                {
+                    return RedirectToAction("Dashboard", "User");
+                }
             }
             ViewBag.ErrorMessage = result;
             return View();

@@ -198,6 +198,7 @@
           <Property Name="MaBP" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="MaChucVu" Type="varchar" MaxLength="10" Nullable="false" />
           <Property Name="LyDo" Type="nvarchar" MaxLength="100" />
+          <Property Name="CCCD" Type="varchar" MaxLength="20" Nullable="false" />
         </EntityType>
         <EntityType Name="NhomHang">
           <Key>
@@ -998,6 +999,7 @@
           <NavigationProperty Name="ChucVu" Relationship="DatabseMarketModel.FK_NhanVien_ChucVu" FromRole="NhanVien" ToRole="ChucVu" />
           <NavigationProperty Name="MayPos" Relationship="DatabseMarketModel.FK_MayPos_NhanVien" FromRole="NhanVien" ToRole="MayPos" />
           <Property Name="LyDo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CCCD" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="NhomHang">
           <Key>
@@ -1790,6 +1792,7 @@
           <EntitySetMapping Name="NhanViens">
             <EntityTypeMapping TypeName="DatabseMarketModel.NhanVien">
               <MappingFragment StoreEntitySet="NhanVien">
+                <ScalarProperty Name="CCCD" ColumnName="CCCD" />
                 <ScalarProperty Name="LyDo" ColumnName="LyDo" />
                 <ScalarProperty Name="MaChucVu" ColumnName="MaChucVu" />
                 <ScalarProperty Name="MaBP" ColumnName="MaBP" />

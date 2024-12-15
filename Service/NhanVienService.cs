@@ -57,5 +57,14 @@ namespace Supermarket_System.Service
             // Ví dụ: sử dụng BCrypt hoặc một hàm băm khác
             return BCrypt.Net.BCrypt.Verify(password, storedHash);
         }
+        public NhanVien GetUserByUserName(string username)
+        {
+            return _sqlConnectionServer.NhanViens.FirstOrDefault(u => u.UserName == username);
+        }
+        public string GetUserRole(string username)
+        {
+            var user = GetUserByUserName(username);
+            return user != null ? user.Roles : string.Empty;
+        }
     }
 }

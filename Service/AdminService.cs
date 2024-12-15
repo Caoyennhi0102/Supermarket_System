@@ -3,7 +3,10 @@ using Supermarket_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Security;
 using System.Web.UI.WebControls.WebParts;
 
 namespace Supermarket_System.Service
@@ -11,6 +14,7 @@ namespace Supermarket_System.Service
     public class AdminService
     {
         private readonly SqlConnectionServer _sqlConnectionServer;
+        
         public AdminService(SqlConnectionServer sqlConnectionServer)
         {
             _sqlConnectionServer = sqlConnectionServer;
@@ -26,6 +30,10 @@ namespace Supermarket_System.Service
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
             Random random = new Random();
             return new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+        public List<NhanVien> GetAllEmployeest()
+        {
+            return _sqlConnectionServer.NhanViens.ToList();
         }
 
         public string AddNhanVien(NhanVien nhanvien, int sothutu, string maQL, string role, string status)
@@ -45,6 +53,10 @@ namespace Supermarket_System.Service
                 {
                     
                     return "Địa chỉ không hợp lệ. Địa chỉ phải có ít nhất 5 ký tự.";
+                }
+                if (!CheckCitizenIdentification.CheckCCCD(nhanvien.CCCD))
+                {
+                    return "Căn cước công dân không hợp lệ";
                 }
                 if (!CheckEmail.IsEmail(nhanvien.Email))
                 {
@@ -87,6 +99,7 @@ namespace Supermarket_System.Service
                 nhanvien.NgaySinh = nhanvien.NgaySinh;
                 nhanvien.MaChucVu = nhanvien.MaChucVu;
                 nhanvien.MaBP = nhanvien.MaBP;
+                nhanvien.CCCD = nhanvien.CCCD;
                 
                 
                 _sqlConnectionServer.NhanViens.Add(nhanvien);
@@ -160,6 +173,15 @@ namespace Supermarket_System.Service
                 return $"Lỗi: {ex.Message}";
             }
         }
+        public NhanVien SearchEmployeeByMaNhanVien(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return null;
+            }
+            var nhanvien = _sqlConnectionServer.NhanViens.SingleOrDefault(u => u.MaNV == searchTerm);
+            return nhanvien;
+        }
         public string UpdateNhanVien(NhanVien updatenhanVien, string maQL, string status)
 
         {
@@ -186,6 +208,10 @@ namespace Supermarket_System.Service
                 {
                     return "Email không hợp lệ.";
                 }
+                if (!CheckCitizenIdentification.CheckCCCD(existingNhanVien.CCCD))
+                {
+                    return "Căn cước công dân không hợp lệ";
+                }
                 var validRoles = new List<string> { "Admin", "Manager", "User" };
                 if (!validRoles.Contains(updatenhanVien.Roles))
                 {
@@ -203,6 +229,7 @@ namespace Supermarket_System.Service
                 existingNhanVien.MaChucVu = updatenhanVien.MaChucVu;
                 existingNhanVien.NgayCapNhat = DateTime.Now;
                 existingNhanVien.Roles = updatenhanVien.Roles;
+                existingNhanVien.CCCD = updatenhanVien.CCCD;
                 _sqlConnectionServer.SaveChanges();
 
                 
@@ -815,6 +842,35 @@ namespace Supermarket_System.Service
             }
             return false;
         }
+        public bool LogOutAsync()
+        {
+            try
+            {
+                // Lấy tên người dùng hiện tại từ Authentication
+                var userName = HttpContext.Current.User.Identity.Name;
+
+                // Tìm nhân viên trong cơ sở dữ liệu theo tên đăng nhập
+                var nhanVien = _sqlConnectionServer.NhanViens.FirstOrDefault(nv => nv.UserName == userName);
+
+                if (nhanVien != null)
+                {
+                    // Cập nhật thời gian đăng xuất cho nhân viên
+                    nhanVien.ThoiGianDangXuat = DateTime.Now;
+                    _sqlConnectionServer.SaveChanges();  // Lưu thay đổi vào cơ sở dữ liệu
+                }
+
+                // Đăng xuất người dùng bằng cách gọi phương thức SignOut
+                FormsAuthentication.SignOut();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu có
+                return false;
+            }
+        }
+
         // Phương thức mã hóa mật khẩu 
         private string HashPassword(string password)
         {

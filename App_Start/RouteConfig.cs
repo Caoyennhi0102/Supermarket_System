@@ -16,7 +16,7 @@ namespace Supermarket_System
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Admin", action = "AddEmployee", id = UrlParameter.Optional }
+                defaults: new { controller = "Admin", action = "UpdateEmployee", id = UrlParameter.Optional }
             );
         }
     }

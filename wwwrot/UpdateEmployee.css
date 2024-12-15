@@ -7,9 +7,11 @@
     border-radius: 8px; /* Góc bo tròn cho form */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
 }
+
 .my-form .form-group {
     margin-bottom: 15px;
 }
+
 form {
     max-width: 1200px; /* Hoặc một giá trị phù hợp */
     margin: auto; /* Căn giữa form */
@@ -180,186 +182,85 @@ input[type="checkbox"], select {
 }
 
 .gender-note {
-   
     margin-left: 10px; /* Khoảng cách giữa checkbox và văn bản */
     color: red;
 }
+
 .gender-container {
     display: flex; /* Sử dụng flexbox để sắp xếp các phần tử ngang */
     align-items: center; /* Căn chỉnh checkbox và văn bản cùng chiều dọc */
 }
+
 body {
     background-color: #66b3ff; /* Màu nền nhẹ cho toàn bộ trang */
 }
-/* Bảng Nhân Viên */
+h3{
+    text-align:center;
+    color:red;
+}
+/* Tạo kiểu cho bảng */
 .table-container {
-    max-width: 100%; /* Đảm bảo không tràn quá form */
-    overflow-x: auto; /* Thêm thanh cuộn ngang khi bảng quá lớn */
-    border: 1px solid #ddd; /* Viền xung quanh bảng */
-}
-table {
+    overflow-x: auto;
     width: 100%;
-    border-collapse: collapse;
-    table-layout: auto; /* Cho phép cột tự động điều chỉnh kích thước */
 }
 
-h3 {
-    text-align: center;
-    color: red;
+.table {
+    width: 100%; /* Đảm bảo bảng chiếm hết chiều rộng của container */
+    border-collapse: collapse; /* Để viền giữa các ô không bị khoảng cách */
 }
 
-th, td {
-    padding: 10px;
-    text-align: left;
-    white-space: nowrap; /* Ngăn chữ xuống dòng */
-    border: 1px solid #ddd; /* Viền giữa các ô */
-    font-size: 14px; /* Kích thước chữ */
+    /* Định dạng các ô trong bảng */
+    .table th, .table td {
+        border: 1px solid #007bff; /* Màu viền xanh dương */
+        padding: 8px; /* Thêm khoảng cách giữa nội dung và viền */
+        text-align: center; /* Căn giữa nội dung */
+        
+    }
+
+    /* Định dạng tiêu đề các cột */
+    .table th {
+        background-color: #f9f9f9; /* Màu nền tiêu đề cột */
+        color: black; /* Màu chữ tiêu đề cột */
+        font-weight: bold;
+    }
+
+    /* Định dạng hàng dữ liệu */
+    .table tr:nth-child(even) {
+        background-color: #f9f9f9; /* Màu nền hàng chẵn */
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1; /* Hiệu ứng khi hover qua hàng */
+    }
+
+    /* Điều chỉnh chiều rộng cột khi người dùng kéo */
+    .table th, .table td {
+        white-space: nowrap; /* Không cho phép dòng văn bản tự động xuống dòng */
+        overflow: hidden;
+        text-overflow: ellipsis; /* Cắt bớt nội dung nếu quá dài */
+    }
+
+/* Thanh cuộn ngang */
+.table-container::-webkit-scrollbar {
+    height: 10px; /* Độ cao của thanh cuộn ngang */
 }
 
-th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    color: #000;
+.table-container::-webkit-scrollbar-thumb {
+    background-color: #007BFF; /* Màu của thanh cuộn */
+    border-radius: 5px;
 }
 
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
+.table-container::-webkit-scrollbar-track {
+    background-color: #f9f9f9; /* Màu nền thanh cuộn */
 }
 
-tr:hover {
-    background-color: #ddd;
+/* Điều chỉnh độ rộng cột */
+.table th, .table td {
+    min-width: 100px; /* Đảm bảo các cột có độ rộng tối thiểu */
+    max-width: 250px; /* Đảm bảo các cột không quá rộng */
 }
 
-.table-bordered {
-    border: 1px solid #ddd;
+/* Tạo kiểu cho các tiêu đề có thể kéo được */
+.table th {
+    cursor: pointer;
 }
-
-.table-striped tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-.container {
-    padding: 20px;
-}
-/* Đặt màu nền cho các cột */
-th:nth-child(1), td:nth-child(1) {
-    background-color: floralwhite; /* Màu nền cho cột đầu tiên */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(2), td:nth-child(2) {
-    background-color: floralwhite; /* Màu nền cho cột thứ hai */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(3), td:nth-child(3) {
-    background-color: floralwhite; /* Màu nền cho cột thứ ba */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(4), td:nth-child(4) {
-    background-color: floralwhite; /* Màu nền cho cột thứ tư */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(5), td:nth-child(5) {
-    background-color: floralwhite; /* Màu nền cho cột thứ năm */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(6), td:nth-child(6) {
-    background-color: floralwhite; /* Màu nền cho cột thứ sáu */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(7), td:nth-child(7) {
-    background-color: floralwhite; /* Màu nền cho cột thứ bảy */
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(8), td:nth-child(8) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(9), td:nth-child(9) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(10), td:nth-child(10) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(11), td:nth-child(11) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-th:nth-child(12), td:nth-child(12) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-th:nth-child(13), td:nth-child(13) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-th:nth-child(14), td:nth-child(14) {
-    background-color: floralwhite;
-    text-align: center;
-    color: black; /* Màu chữ đen cho các tên cột */
-    font-weight: bold;
-}
-
-
-
-
-
-tr:hover {
-    background-color: #ddd;
-}
-
-.table-bordered {
-    border: 1px solid #ddd;
-}
-
-.table-striped tbody tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
-
-.container {
-    padding: 20px;
-}
-
-
-
-
-
