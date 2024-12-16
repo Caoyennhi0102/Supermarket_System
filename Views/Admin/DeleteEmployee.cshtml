@@ -1,0 +1,392 @@
+﻿
+
+@{
+    ViewData["Title"] = "Xóa Nhân Viên";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
+}
+@*
+    @{
+        bool isSessionActive = (bool)ViewBag.IsSessionActive;
+    }
+*@
+
+<div class="container">
+    <h2>Xóa Nhân Viên</h2>
+    <link href="~/Content/DeleteEmployee.css" rel="stylesheet" />
+
+    <!-- Form tìm kiếm nhân viên -->
+    <form id="searchForm" method="post">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <div class="form-group">
+            <label for="MaNV">Mã nhân viên:</label>
+            <input type="text" id="maNhanVien" name="MaNV" class="form-control" placeholder="Nhập mã nhân viên" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+    <div id="searchResult" class="mt-3"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#searchForm').submit(function (e) {
+                e.preventDefault(); // Ngừng gửi form
+
+                var maNV = $('#maNhanVien').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/Admin/SearchEmployee/UpdateEmployee',  // URL đúng
+                    data: { MaNV: maNV },
+                    success: function (response) {
+                        console.log(response); // Kiểm tra dữ liệu trả về từ server
+
+                        if (response && response.success === false) {
+                            // Nếu không tìm thấy nhân viên, hiển thị thông báo lỗi
+                            $('#searchResult').html("<p class='text-danger'>" + response.message + "</p>");
+                        } else if (response && response.success === true && response.employee) {
+                            // Nếu tìm thấy nhân viên
+                            $("MaBP").val(response.employee.MaBP);
+                            $("MaChucVu").val(response.employee.MaChucVu);
+                            $("#TenNV").val(response.employee.TenNV);
+                            $("#CCCD").val(response.employee.CCCD);
+                            $("#GioiTinh").val(response.employee.GioiTinh);
+                            $("NgaySinh").val(response.employee.NgaySinh);
+                            $("#DiaChi").val(response.employee.DiaChi);
+                            $("#SDT").val(response.employee.SDT);
+                            $("#Email").val(response.employee.Email);
+                            $("#Roles").val(response.employee.Roles);
+                            $("#UserName").val(response.employee.UserName);
+                            $("#TrangThaiTaiKhoan").val(response.employee.TrangThaiTaiKhoan);
+                            $("#NgayTao").val(response.employee.NgayTao);
+                            $('#searchResult').html("<p class='text-success'>Nhân viên đã được tìm thấy: " + response.employee.HoTen + "</p>");
+                        } else {
+                            // Nếu response là null hoặc không hợp lệ
+                            $('#searchResult').html("<p class='text-danger'>Không có phản hồi hợp lệ từ server.</p>");
+                        }
+                    },
+                    error: function () {
+                        // Nếu có lỗi trong AJAX
+                        $('#searchResult').html("<p class='text-danger'>Đã xảy ra lỗi. Vui lòng thử lại.</p>");
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    <!-- Form cập nhật thông tin nhân viên -->
+    @using (Html.BeginForm("DeleteEmployee", "DeleteEmployee", FormMethod.Post, new { @class = "my-form" }))
+    {
+        <div id="updateEmployeeForm">
+            <div class="row">
+                <!-- Họ tên -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="HoTen">Họ tên:</label>
+                        <input type="text" id="Hoten" name="nhanVien.TenVN" class="form-control" placeholder="Nhập họ tên" required />
+                    </div>
+                </div>
+                <!-- Địa chỉ -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="CCCD">Căn Cước Công Dân:</label>
+                        <input type="text" id="CCCD" name="nhanVien.CCCD" class="form-control" placeholder="Nhập căn cước công dân " required />
+                    </div>
+                </div>
+                <!-- Địa chỉ -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="DiaChi">Địa chỉ:</label>
+                        <input type="text" id="DiaChi" name="nhanVien.DiaChi" class="form-control" placeholder="Nhập địa chỉ" required />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <!-- Số điện thoại -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="SDT">Số điện thoại:</label>
+                        <input type="text" id="SDT" name="nhanVien.SDT" class="form-control" placeholder="Nhập số điện thoại" required />
+                    </div>
+                </div>
+                <!-- Mã Bộ Phận -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="MaBoPhan">Mã Bộ Phận:</label>
+                        <select id="MaBoPhan" name="nhanVien.MaBP" class="form-control" required>
+                            <option value="">Chọn bộ phận</option>
+                            <!-- Thêm các tùy chọn từ cơ sở dữ liệu -->
+                        </select>
+                    </div>
+                </div>
+                <!-- Mã Chức Vụ -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="MaChucVu">Mã Chức Vụ:</label>
+                        <select id="MaChucVu" name="nhanVien.MaChucVu" class="form-control" required>
+                            <option value="">Chọn chức vụ</option>
+                            <!-- Thêm các tùy chọn từ cơ sở dữ liệu -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Ngày sinh -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="NgaySinh">Ngày sinh:</label>
+                        <input type="date" id="NgaySinh" name="nhanVien.NgaySinh" class="form-control" required />
+                    </div>
+                </div>
+                <!-- Vai trò -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Role">Vai trò:</label>
+                        <select id="Role" name="role" class="form-control" required>
+                            <option value="Admin">Admin</option>
+                            <option value="Manager">Manager</option>
+                            <option value="User">User</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Trạng thái -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Status">Trạng thái:</label>
+                        <select id="Status" name="status" class="form-control" required>
+                            <option value="duyet">Kích hoạt</option>
+                            <option value="koduyet">Không kích hoạt</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ô Giới tính ở hàng dưới cùng bên trái -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="GioiTinh">Giới tính:</label>
+                        <div class="gender-container">
+                            <input type="checkbox" id="GioiTinh" name="nhanVien.GioiTinh" value="true" /> Nam
+                            <span class="gender-note"> (Lưu ý: Nam thì tích, Nữ không tích)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="Email">Email:</label>
+                        <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
+                    </div>
+                </div>
+            </div>
+
+           <button class="btn btn-danger" id="deleteBtn">Xóa</button>
+        </div>
+    }
+    <script>
+        
+    $(document).ready(function() {
+        // Lắng nghe sự kiện click trên tất cả các nút xóa
+        $(".delete-btn").click(function() {
+            // Lấy dữ liệu từ thuộc tính data của nút
+            var maNV = $(this).data("maNV");
+            var maQL = $(this).data("maQL");
+
+            // Hiển thị hộp thoại xác nhận
+            if (confirm("Bạn có chắc chắn muốn xóa nhân viên này?")) {
+                // Gọi API để xóa nhân viên
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("DeleteEmployee", "Admin")',
+                    data: { maNV: maNV, MaQL: maQL },
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);  // Thông báo thành công
+                            // Reload trang hoặc làm mới dữ liệu
+                            location.reload();
+                        } else {
+                            alert(response.message);  // Thông báo lỗi
+                        }
+                    },
+                    error: function() {
+                        alert("Đã xảy ra lỗi trong quá trình xóa nhân viên.");
+                    }
+                });
+            }
+        });
+    });
+    </script>
+
+   
+    @*
+        <script>
+                $(document).ready(function () {
+                    // Kiểm tra Session
+                    var isSessionActive = @isSessionActive.ToString().ToLower();
+
+                    // Nếu Session hết hạn, vô hiệu hóa form
+                    if (!isSessionActive) {
+                        $("#myForm input, #myForm button").prop("disabled", true);
+                        alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
+                    }
+                });
+        </script>
+    *@
+    <h3>Danh Sách Nhân Viên</h3>
+    <div class="table-container">
+        <table class="table" id="employeeTable">
+            <thead>
+                <tr>
+                    <th>Mã Nhân Viên</th>
+                    <th>Mã Bộ Phận</th>
+                    <th>Mã Chức Vụ</th>
+                    <th>Họ Tên Nhân Viên</th>
+                    <th>Căn Cước Công Dân</th>
+                    <th>Giới Tính</th>
+                    <th>Ngày Sinh</th>
+                    <th>Địa chỉ</th>
+                    <th>SĐT</th>
+                    <th>Email</th>
+                    <th>Vai Trò</th>
+                    <th>UserName</th>
+                    <th>Trạng thái</th>
+                    <th>Ngày tạo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dữ liệu sẽ được cập nhật qua Ajax -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Khi form update nhân viên được submit
+        $('#updateForm').submit(function (e) {
+            e.preventDefault(); // Ngừng gửi form
+
+            var maNV = $('#MaNhanVien').val();
+            var maBP = $('#MaBoPhan').val();
+            var maCV = $('#MaChucVu').val();
+            var hoTen = $('#HoTen').val();
+            var cccd = $('#CCCD').val();
+            var gioiTinh = $('#GioiTinh').val();
+            var ngaySinh = $('#NgaySinh').val();
+            var diaChi = $('#DiaChi').val();
+            var sdt = $('#SDT').val();
+            var email = $('#Email').val();
+            var vaiTro = $('#VaiTro').val();
+            var userName = $('#UserName').val();
+            var trangThai = $('#TrangThai').val();
+            var ngayTao = $('#NgayTao').val();
+            var maQL = $('#MaQuanLy').val(); // Ví dụ, nếu có mã quản lý
+            var status = $('#Status').val(); // Nếu có trạng thái
+
+            $.ajax({
+                type: 'POST',
+                url: '/UpdateEmployee/UpdateEmployee',  // URL đúng đến phương thức controller của bạn
+                data: {
+                    updatenhanVien: {
+                        MaNhanVien: maNV,
+                        MaBoPhan: maBP,
+                        MaChucVu: maCV,
+                        HoTen: hoTen,
+                        CCCD: cccd,
+                        GioiTinh: gioiTinh,
+                        NgaySinh: ngaySinh,
+                        DiaChi: diaChi,
+                        SDT: sdt,
+                        Email: email,
+                        VaiTro: vaiTro,
+                        UserName: userName,
+                        TrangThai: trangThai,
+                        NgayTao: ngayTao
+                    },
+                    maQL: maQL,
+                    status: status
+                },
+                success: function (response) {
+                    console.log(response); // Kiểm tra dữ liệu trả về từ server
+
+                    if (response.success) {
+                        $('#searchResult').html("<p class='text-success'>" + response.message + "</p>");
+                        updateTable(response.employee);  // Cập nhật bảng
+                    } else {
+                        $('#searchResult').html("<p class='text-danger'>" + response.message + "</p>");
+                    }
+                },
+                error: function () {
+                    $('#searchResult').html("<p class='text-danger'>Đã xảy ra lỗi. Vui lòng thử lại.</p>");
+                }
+            });
+        });
+
+        function updateTable(employeeList) {
+            var tableBody = $("#employeeTable tbody");
+            tableBody.empty();  // Xóa dữ liệu cũ trong bảng
+
+            employeeList.forEach(function (employee) {
+                var row = $("<tr>");
+                row.append("<td>" + employee.MaNV + "</td>");
+                row.append("<td>" + employee.MaBP + "</td>");
+                row.append("<td>" + employee.MaChucVu + "</td>");
+                row.append("<td>" + employee.TenNV + "</td>");
+                row.append("<td>" + employee.CCCD + "</td>");
+                row.append("<td>" + employee.GioiTinh + "</td>");
+                row.append("<td>" + employee.NgaySinh + "</td>");
+                row.append("<td>" + employee.DiaChi + "</td>");
+                row.append("<td>" + employee.SDT + "</td>");
+                row.append("<td>" + employee.Email + "</td>");
+                row.append("<td>" + employee.Role + "</td>");
+                row.append("<td>" + employee.UserName + "</td>");
+                row.append("<td>" + employee.TrangThai + "</td>");
+                row.append("<td>" + employee.NgayTao + "</td>");
+                tableBody.append(row);
+            });
+        }
+                '<td><button class="delete-btn" data-maNV="' + employee.MaNhanVien + '">Xóa</button></td>' +
+                '</tr>';
+
+            $('#employeeTable tbody').append(newRow); // Thêm dòng mới vào bảng
+        
+
+        // Xử lý sự kiện khi nhấn nút xóa
+        $(document).on('click', '.delete-btn', function () {
+            var maNV = $(this).data('maNV');
+            var confirmation = confirm("Bạn có chắc chắn muốn xóa nhân viên này?");
+
+            if (confirmation) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/DeleteEmployee/DeleteEmployee',  // URL đúng đến phương thức controller của bạn
+                    data: { maNV: maNV },
+                    success: function (response) {
+                        if (response.success) {
+                            $('#searchResult').html("<p class='text-success'>" + response.message + "</p>");
+                            $('#row-' + maNV).remove();  // Xóa dòng khỏi bảng
+                        } else {
+                            $('#searchResult').html("<p class='text-danger'>" + response.message + "</p>");
+                        }
+                    },
+                    error: function () {
+                        $('#searchResult').html("<p class='text-danger'>Đã xảy ra lỗi. Vui lòng thử lại.</p>");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+
+
+
+

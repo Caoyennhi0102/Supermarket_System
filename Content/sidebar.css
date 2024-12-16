@@ -1,65 +1,72 @@
-﻿/* Toàn bộ container */
-.container-fluid {
-    margin: 0;
-    padding: 0;
-}
-
-/* Sidebar */
+﻿/* Sidebar */
 .sidebar {
-    height: 100vh; /* Chiều cao đầy đủ màn hình */
-    background-color: #f8f9fa; /* Màu nền Sidebar */
-    padding: 20px 10px; /* Thêm khoảng cách trong Sidebar */
-    color: #fff; /* Màu chữ trắng */
+    width: 250px;
+    background-color: #007bff; /* Màu nền cho sidebar */
+    color: white; /* Màu chữ trắng */
+    height: 100vh; /* Chiều cao toàn màn hình */
+    padding-top: 20px; /* Khoảng cách trên cùng */
+    position: fixed; /* Giữ thanh sidebar cố định */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Đảm bảo thanh sidebar nằm trên cùng */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng đổ */
 }
 
-    /* Logo trong Sidebar */
-    .sidebar .logo img {
-        max-width: 80%; /* Logo chiếm tối đa 80% chiều rộng Sidebar */
-        height: auto; /* Giữ tỷ lệ hình ảnh */
-        margin-bottom: 20px; /* Khoảng cách dưới logo */
+/* Avatar Image */
+.user-image img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover; /* Cắt ảnh vừa vặn */
+    border-radius: 50%; /* Làm tròn ảnh */
+    border: 3px solid white; /* Viền trắng cho ảnh */
+    margin: 0 auto; /* Căn giữa ảnh */
+}
+
+/* Tên người dùng */
+.user-name h4 {
+    text-align: center; /* Căn giữa tên người dùng */
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+/* Các mục trong menu */
+.list-group {
+    margin-top: 30px; /* Khoảng cách giữa ảnh người dùng và menu */
+}
+
+/* Các mục trong sidebar */
+.list-group-item {
+    color: #000000;
+    background-color: white; /* Màu nền ban đầu */
+    border: none; /* Xóa viền */
+    padding: 10px 15px;
+    font-size: 16px;
+    display: flex;
+    align-items: center; /* Căn giữa nội dung */
+    cursor: pointer;
+}
+
+    .list-group-item:hover {
+        background-color: #808080; /* Màu nền khi hover */
+        border-radius: 5px;
     }
 
-    /* Danh sách menu */
-    .sidebar .list-group {
-        margin-top: 20px;
+    /* Các mục menu có icon */
+    .list-group-item i {
+        margin-right: 10px; /* Khoảng cách giữa icon và text */
     }
 
-    .sidebar .list-group-item {
-        background-color: #0094ff; /* Nền trong suốt */
-        color: #fff; /* Màu chữ */
-        border: 1px solid #007bff; /* Viền màu xanh */
-        border-radius: 5px; /* Bo tròn góc */
-        padding: 10px 15px;
-        font-size: 16px;
-        margin-bottom: 10px; /* Khoảng cách giữa các mục */
-    }
+/* Các mục dropdown (collapse) */
+.collapse .list-group-item {
+    background-color: white; /* Màu nền cho các mục con */
+}
 
-        .sidebar .list-group-item:hover {
-            background-color: #007bff; /* Đổi nền khi hover */
-            color: #fff; /* Màu chữ khi hover */
-            border: 1px solid #0056b3; /* Đổi màu viền khi hover */
-        }
+.text-danger {
+    color: #dc3545; /* Màu đỏ cho nút Đăng xuất */
+}
 
-/* Nội dung chính */
-.main-content {
+/* Main Content Area */
+.col-md-9 {
+    margin-left: 270px; /* Để nội dung không bị che khuất bởi sidebar */
     padding: 20px;
-    background-color: #f8f9fa; /* Màu nền nhạt */
-    height: 100vh;
-    overflow-y: auto; /* Kích hoạt cuộn dọc nếu cần */
 }
-/* Tùy chỉnh biểu tượng */
-.list-group-item i {
-    margin-right: 8px; /* Khoảng cách giữa icon và text */
-    font-size: 18px; /* Đổi kích thước icon */
-}
-
-/* Tùy chỉnh màu sắc nút */
-.list-group-item-action {
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-}
-
-    .list-group-item-action:hover {
-        background-color: #0056b3;
-    }

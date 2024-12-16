@@ -1,8 +1,11 @@
-﻿using Supermarket_System.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Supermarket_System.Models;
 using Supermarket_System.Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -14,12 +17,13 @@ namespace Supermarket_System.Controllers
     public class AdminController : Controller
     {
         private readonly AdminService _adminService;
-       
-        public AdminController()
+        private readonly SqlConnectionServer _sqlConnectionServer;
+        public AdminController(SqlConnectionServer sqlConnectionServer)
         {
             _adminService = new AdminService(new SqlConnectionServer());
-            
+            _sqlConnectionServer = sqlConnectionServer;
         }
+        public AdminController() { }
       /*  protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             if (Session["UserName"] == null)
@@ -40,7 +44,8 @@ namespace Supermarket_System.Controllers
             Session.Clear();
             return RedirectToAction("Login", "Admin");
         }
-
+        
+        
         // GET: Admin
         [HttpGet]
         public ActionResult AddEmployee()
@@ -51,10 +56,18 @@ namespace Supermarket_System.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult AddEmployee(NhanVien nhanVien, int sothuTu, string maQl, string role, string status)
+        public async Task <ActionResult> AddEmployee(NhanVien nhanVien, int sothuTu, string maQl, string role, string status, IFormFile formFile)
         {
             try
             {
+                if(formFile != null && formFile.Length > 0)
+                {
+                    using(var memoryStream = new MemoryStream())
+                    {
+                        await formFile.CopyToAsync(memoryStream);
+                        nhanVien.Avatar = memoryStream.ToArray();
+                    }
+                }
                 // Gọi phương thức từ AdminService
                 var reult = _adminService.AddNhanVien(nhanVien, sothuTu, maQl, role, status);
 
@@ -134,6 +147,33 @@ namespace Supermarket_System.Controllers
             }catch(Exception ex)
             {
                 return Json(new { success = false, message = $"Đã xảy ra lỗi khi cập nhật thông tin: {ex.Message}" });
+            }
+        }
+        [HttpGet]
+        public ActionResult DeleteEmployee()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteEmployee(string maNV, string MaQL)
+        {
+            try
+            {
+                if(string.IsNullOrEmpty(maNV) || string.IsNullOrEmpty(MaQL))
+                {
+                    return Json(new { success = false, message = "Mã nhân viên hoặc mã quản lý không hợp lệ." });
+                }
+                var  result = _adminService.DeleteNhanVien(maNV, MaQL);
+                if (result != "Nhân viên đã được xóa thành công.")
+                {
+                    return Json(new { success = false, message = result});
+
+                }
+                return Json(new { success = true, message = "Nhân viên đã được xóa thành công!" });
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = $"Lỗi khi xóa nhân viên{ex.Message}" });
             }
         }
     }

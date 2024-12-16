@@ -138,73 +138,102 @@
                     <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
                 </div>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
-
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label for="AnhNhanVien">Ảnh Nhân Viên:</label>
+                    <input type="file" id="AnhNhanVien" name="AnhNhanVien" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group mb-3">
+                    <label>Xem trước ảnh:</label>
+                    <div>
+                        <img id="preview" src="~/images/default-avatar.png" alt="Xem trước ảnh" style="width: 150px; height: 150px; border: 1px solid #ddd; padding: 5px;" />
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
     }
-    @*
+
+
+
+            @*
+                <script>
+                        $(document).ready(function () {
+                            // Kiểm tra Session
+                            var isSessionActive = @isSessionActive.ToString().ToLower();
+
+                            // Nếu Session hết hạn, vô hiệu hóa form
+                            if (!isSessionActive) {
+                                $("#myForm input, #myForm button").prop("disabled", true);
+                                alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
+                            }
+                        });
+                </script>
+            *@
+            <!-- Bảng hiển thị danh sách nhân viên -->
+            <div class="table-container">
+                <h3 class="mt-5">Danh Sách Nhân Viên</h3>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Mã Nhân Viên</th>
+                            <th>Mã Bộ Phận</th>
+                            <th>Mã Chức Vụ</th>
+                            <th>Họ Tên Nhân Viên</th>
+                            <th>Căn Cước Công Dân</th>
+                            <th>Giới Tính</th>
+                            <th>Ngày Sinh</th>
+                            <th>Địa chỉ</th>
+                            <th>SĐT</th>
+                            <th>Email</th>
+                            <th>Vai Trò</th>
+                            <th>UserName</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var nhanVien in ViewBag.employeeList)
+                        {
+                            <tr>
+                                <td>@nhanVien.MaNV</td>
+                                <td>@nhanVien.MaBP</td>
+                                <td>@nhanVien.MaChucVu</td>
+                                <td>@nhanVien.TenNV</td>
+                                <td>@nhanVien.CCCD</td>
+                                <td>@(nhanVien.GioiTinh ? "Nam" : "Nữ")</td>
+                                <td>@nhanVien.NgaySinh.ToString("dd/MM/yyyy")</td>
+                                <td>@nhanVien.DiaChi</td>
+                                <td>@nhanVien.SDT</td>
+                                <td>@nhanVien.Email</td>
+                                <td>@nhanVien.DiaChi</td>
+                                <td>@nhanVien.Roles</td>
+                                <td>@nhanVien.UserName</td>
+                                <td>@(nhanVien.TrangThaiTaiKhoan ? "Hoạt động" : "Khóa")</td>
+                                <td>@nhanVien.NgayTao.ToString("dd/MM/yyyy")</td>
+
+
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+            
+        </div>
         <script>
-                $(document).ready(function () {
-                    // Kiểm tra Session
-                    var isSessionActive = @isSessionActive.ToString().ToLower();
+            function previewImage(event) {
+                var input = event.target;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var img = document.getElementById('preview');
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
 
-                    // Nếu Session hết hạn, vô hiệu hóa form
-                    if (!isSessionActive) {
-                        $("#myForm input, #myForm button").prop("disabled", true);
-                        alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
-                    }
-                });
         </script>
-    *@
-    <!-- Bảng hiển thị danh sách nhân viên -->
-    <div class="table-container">
-        <h3 class="mt-5">Danh Sách Nhân Viên</h3>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Mã Nhân Viên</th>
-                    <th>Mã Bộ Phận</th>
-                    <th>Mã Chức Vụ</th>
-                    <th>Họ Tên Nhân Viên</th>
-                    <th>Căn Cước Công Dân</th>
-                    <th>Giới Tính</th>
-                    <th>Ngày Sinh</th>
-                    <th>Địa chỉ</th>
-                    <th>SĐT</th>
-                    <th>Email</th>
-                    <th>Vai Trò</th>
-                    <th>UserName</th>
-                    <th>Trạng thái</th>
-                    <th>Ngày tạo</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var nhanVien in ViewBag.employeeList)
-                {
-                    <tr>
-                        <td>@nhanVien.MaNV</td>
-                        <td>@nhanVien.MaBP</td>
-                        <td>@nhanVien.MaChucVu</td>
-                        <td>@nhanVien.TenNV</td>
-                        <td>@nhanVien.CCCD</td>
-                        <td>@(nhanVien.GioiTinh ? "Nam" : "Nữ")</td>
-                        <td>@nhanVien.NgaySinh.ToString("dd/MM/yyyy")</td>
-                        <td>@nhanVien.DiaChi</td>
-                        <td>@nhanVien.SDT</td>
-                        <td>@nhanVien.Email</td>
-                        <td>@nhanVien.DiaChi</td>
-                        <td>@nhanVien.Roles</td>
-                        <td>@nhanVien.UserName</td>
-                        <td>@(nhanVien.TrangThaiTaiKhoan ? "Hoạt động" : "Khóa")</td>
-                        <td>@nhanVien.NgayTao.ToString("dd/MM/yyyy")</td>
-
-
-
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-    </div>
-</div>

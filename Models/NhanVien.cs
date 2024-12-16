@@ -56,6 +56,7 @@ namespace Supermarket_System.Models
         public string MaChucVu { get; set; }
         public string LyDo { get; set; }
         public string CCCD { get; set; }
+        public byte[] Avatar { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChamCong> ChamCongs { get; set; }

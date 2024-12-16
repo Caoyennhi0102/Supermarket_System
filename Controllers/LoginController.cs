@@ -25,14 +25,26 @@ namespace Supermarket_System.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(string username, string password)
+        public ActionResult Login(string username, string password, NhanVien nhanVien)
         {
             bool isFirstLogin;
             string result = _nhanVienService.LoginService(username, password, out isFirstLogin);
             
             if(result == "Đăng Nhập Thành Công")
-            { 
-                Session["UserName"] = username;
+            {
+                Session["UserName"] = nhanVien.TenNV;
+                Session["MaNV"] = nhanVien.MaNV;
+                if(nhanVien.Avatar != null)
+                {
+                    string avatarBase64 = Convert.ToBase64String(nhanVien.Avatar);
+                    string imageDataURL = $"data:image/png;base64,{avatarBase64}";
+                    Session["Avatar"] = imageDataURL;
+                }
+                else
+                {
+                    Session["Avatar"] = "/Images/default-avatar.png";
+                }
+
                 FormsAuthentication.SetAuthCookie(username, false);
                 if (isFirstLogin)
                 {

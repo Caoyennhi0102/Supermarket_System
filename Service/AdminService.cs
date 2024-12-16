@@ -100,6 +100,7 @@ namespace Supermarket_System.Service
                 nhanvien.MaChucVu = nhanvien.MaChucVu;
                 nhanvien.MaBP = nhanvien.MaBP;
                 nhanvien.CCCD = nhanvien.CCCD;
+                nhanvien.Avatar = nhanvien.Avatar;
                 
                 
                 _sqlConnectionServer.NhanViens.Add(nhanvien);
@@ -304,18 +305,20 @@ namespace Supermarket_System.Service
                 {
                     return "Nhân viên không tồn tại.";
                 }
-                deleteNV.NgayNghiViec = DateTime.Now;
-                deleteNV.NgayCapNhat = DateTime.Now;
-                _sqlConnectionServer.NhanViens.Remove(deleteNV);
-                _sqlConnectionServer.SaveChanges();
+                var result = _sqlConnectionServer.Database.ExecuteSqlCommand("EXEC DeleteNhanVien @MaNV = {0}", MaNV);
 
-                string managerEmail = GetManagerEmail(maQL);
-                if (string.IsNullOrEmpty(managerEmail))
+
+                if (result > 0)
                 {
-                    return "Quản lý không hợp lệ hoặc không tìm thấy email quản lý.";
-                }
-                string subject = $"Duyệt xoá nhân viên trong hệ thống : {deleteNV.TenNV}";
-                string body = $@"
+
+
+                    string managerEmail = GetManagerEmail(maQL);
+                    if (string.IsNullOrEmpty(managerEmail))
+                    {
+                        return "Quản lý không hợp lệ hoặc không tìm thấy email quản lý.";
+                    }
+                    string subject = $"Duyệt xoá nhân viên trong hệ thống : {deleteNV.TenNV}";
+                    string body = $@"
     <html>
     <body>
         <p>Kính gửi Quản lý,</p>
@@ -334,8 +337,13 @@ namespace Supermarket_System.Service
         <p>Trân trọng.</p>
     </body>
     </html>";
-                SendEmailToManager.IsSendEmail(managerEmail, subject, body);
-                return "Nhân viên đã được xóa thành công.";
+                    SendEmailToManager.IsSendEmail(managerEmail, subject, body);
+                    return "Nhân viên đã được xóa thành công.";
+                }
+                else
+                {
+                    return "Có lỗi xảy ra khi xóa nhân viên.";
+                }
 
             }
             catch(Exception ex)

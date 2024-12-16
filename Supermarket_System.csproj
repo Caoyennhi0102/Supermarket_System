@@ -293,6 +293,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\DeleteEmployee.css" />
     <Content Include="Content\sidebar.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -350,6 +351,7 @@
     <Content Include="Views\Admin\AddEmployee.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Admin\UpdateEmployee.cshtml" />
+    <Content Include="Views\Admin\DeleteEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
