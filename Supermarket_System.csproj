@@ -277,6 +277,7 @@
     <Compile Include="Service\SendEmailToManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\AddEmployee.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-grid.rtl.css" />
@@ -293,8 +294,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\ChangeCredentials.css" />
     <Content Include="Content\DeleteEmployee.css" />
+    <Content Include="Content\login.css" />
     <Content Include="Content\sidebar.css" />
+    <Content Include="Content\UpdateEmployee.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -315,10 +319,6 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="wwwrot\AddEmployee.css" />
-    <Content Include="wwwrot\ChangeCredentials.css" />
-    <Content Include="wwwrot\login.css" />
-    <Content Include="wwwrot\UpdateEmployee.css" />
     <EntityDeploy Include="Models\Model1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Model1.Designer.cs</LastGenOutput>

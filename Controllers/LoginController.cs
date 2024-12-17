@@ -12,10 +12,23 @@ namespace Supermarket_System.Controllers
     public class LoginController : Controller
     {
         private readonly NhanVienService _nhanVienService;
-        public LoginController()
+        private readonly AdminService _adminService;
+        public LoginController(AdminService adminService)
         {
             var sqlConnectionServer = new SqlConnectionServer();
             _nhanVienService = new NhanVienService(sqlConnectionServer);
+            _adminService = adminService;
+        }
+        public LoginController() { }
+        public ActionResult GetAvatar(string maNV)
+        {
+            var nhanvien = _adminService.FindNhanVienByMaNV(maNV);
+            if(nhanvien != null && nhanvien.Avatar != null)
+            {
+                return File(nhanvien.Avatar, "image/png");
+            }
+            var DefaultImage = Server.MapPath("~/Images/default-avatar.png");
+            return File(DefaultImage, "image/png");
         }
         [HttpGet]
         public ActionResult Login(string returnUrl)
@@ -24,7 +37,7 @@ namespace Supermarket_System.Controllers
             return View("Login");
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public ActionResult Login(string username, string password, NhanVien nhanVien)
         {
             bool isFirstLogin;
@@ -36,13 +49,11 @@ namespace Supermarket_System.Controllers
                 Session["MaNV"] = nhanVien.MaNV;
                 if(nhanVien.Avatar != null)
                 {
-                    string avatarBase64 = Convert.ToBase64String(nhanVien.Avatar);
-                    string imageDataURL = $"data:image/png;base64,{avatarBase64}";
-                    Session["Avatar"] = imageDataURL;
+                    Session["Avatar"] = Url.Action("GetAvatar", "NhanVien", new { maNV = nhanVien.MaNV });
                 }
                 else
                 {
-                    Session["Avatar"] = "/Images/default-avatar.png";
+                    Session["Avatar"] = Url.Content("~/Images/default-avatar.png");
                 }
 
                 FormsAuthentication.SetAuthCookie(username, false);

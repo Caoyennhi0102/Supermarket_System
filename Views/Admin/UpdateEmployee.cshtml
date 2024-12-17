@@ -5,14 +5,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
 }
 @*
-@{
-    bool isSessionActive = (bool)ViewBag.IsSessionActive;
-}
+    @{
+        bool isSessionActive = (bool)ViewBag.IsSessionActive;
+    }
 *@
 
 <div class="container">
-    <h2>Cập nhật thông tin nhân viên</h2>
-    <link href="~/wwwrot/UpdateEmployee.css" rel="stylesheet" />
+    <h2>CẬP NHẬT THÔNG TIN NHÂN VIÊN</h2>
+    <link href="~/Content/UpdateEmployee.css" rel="stylesheet" />
 
     <!-- Form tìm kiếm nhân viên -->
     <form id="searchForm" method="post">
@@ -184,25 +184,45 @@
                         <input type="email" id="Email" name="nhanVien.Email" class="form-control" placeholder="Nhập email" required />
                     </div>
                 </div>
-            </div>
 
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="AnhNhanVien">Ảnh Nhân Viên:</label>
+                        <input type="file" id="AnhNhanVien" name="AnhNhanVien" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label>Xem trước ảnh:</label>
+                        <div style="position: relative; display: inline-block; width: 150px; height: 150px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden;">
+                            <!-- Ảnh xem trước -->
+                            <img id="preview" src="~/images/default-avatar.png" alt="Xem trước ảnh" style="width: 100%; height: 100%; object-fit: cover;" />
+
+                            <!-- Nút X nằm trong khung ảnh -->
+                            <button type="button" class="btn-close" style="position: absolute; top: 5px; right: 5px; background-color: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; line-height: 1; text-align: center; cursor: pointer; display: none;" onclick="removeImage()" aria-label="Close">×</button>
+                        </div>
+                    </div>
+                    </div>
+            </div>
             <button type="submit" class="btn btn-primary">Cập nhật nhân viên</button>
         </div>
-    }
-    @*
-    <script>
-            $(document).ready(function () {
-                // Kiểm tra Session
-                var isSessionActive = @isSessionActive.ToString().ToLower();
 
-                // Nếu Session hết hạn, vô hiệu hóa form
-                if (!isSessionActive) {
-                    $("#myForm input, #myForm button").prop("disabled", true);
-                    alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
-                }
-            });
-    </script>
-        *@
+    }
+
+    @*
+        <script>
+                $(document).ready(function () {
+                    // Kiểm tra Session
+                    var isSessionActive = @isSessionActive.ToString().ToLower();
+
+                    // Nếu Session hết hạn, vô hiệu hóa form
+                    if (!isSessionActive) {
+                        $("#myForm input, #myForm button").prop("disabled", true);
+                        alert("Phiên làm việc của bạn đã hết hạn. Vui lòng đăng nhập lại.");
+                    }
+                });
+        </script>
+    *@
     <h3>Danh Sách Nhân Viên</h3>
     <div class="table-container">
         <table class="table" id="employeeTable">
@@ -316,7 +336,36 @@
     });
 
 </script>
+<script>
+    function previewImage(event) {
+        const preview = document.getElementById('preview');
+        const btnClose = document.querySelector('.btn-close');
 
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result; // Hiển thị ảnh mới
+                btnClose.style.display = 'block'; // Hiện nút X
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function removeImage() {
+        const preview = document.getElementById('preview');
+        const inputFile = document.getElementById('AnhNhanVien');
+        const btnClose = document.querySelector('.btn-close');
+
+        // Xóa ảnh và reset input
+        preview.src = '~/images/default-avatar.png'; // Quay về ảnh mặc định
+        inputFile.value = ''; // Reset input file
+        btnClose.style.display = 'none'; // Ẩn nút X
+    }
+
+
+
+</script>
 
 
 

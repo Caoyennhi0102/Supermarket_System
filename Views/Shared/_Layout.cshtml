@@ -53,9 +53,26 @@
                         <a href="/Admin/DeleteEmployee" class="list-group-item list-group-item-action">
                             <i class="bi bi-person-x"></i>Xóa Nhân Viên
                         </a>
+                        </div>
+
+                        <a href="#" class="list-group-item list-group-item-action" data-bs-toggle="collapse" data-bs-target="#departmentFunctions" aria-expanded="false" aria-controls="departmentFunctions">
+                            <i class="bi bi-house-door-fill"></i> QUẢN LÝ BỘ PHẬN
+                        </a>
+                        <div class="collapse" id="departmentFunctions">
+                            <a href="/Admin/AddDepartment" class="list-group-item list-group-item-action">
+                                <i class="bi bi-plus-square"></i>Thêm bộ phận
+                            </a>
+                            <a href="/Admin/UpdateDepartment" class="list-group-item list-group-item-action">
+                                <i class="bi bi-pencil-square"></i>Cập nhật thông tin bộ phận
+                            </a>
+                            <a href="/Admin/DeleteDepartment" class="list-group-item list-group-item-action">
+                                <i class="bi bi-x-circle"></i>Xóa bộ phận
+                            </a>
+                        </div>
 
 
-                    </div>
+
+                    
                     <!-- Nút Logout -->
                     <a href="@Url.Action("Logout", "Admin")" class="list-group-item list-group-item-action text-danger">
                         <i class="bi bi-box-arrow-right"></i> Đăng xuất

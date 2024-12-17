@@ -18,6 +18,13 @@ h1 {
     margin-bottom: 20px;
     color: #333;
 }
+/* CSS để điều chỉnh kích thước logo */
+.logo img {
+    width: 150px; /* Điều chỉnh kích thước logo, thay đổi theo yêu cầu */
+    height: auto; /* Tự động điều chỉnh chiều cao để giữ tỷ lệ */
+    display: block;
+    margin: 0 auto; /* Căn giữa logo */
+}
 
 
 

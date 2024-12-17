@@ -14,7 +14,7 @@
     <h2 class="text-center">Thêm Nhân Viên</h2>
 
     <script src="/js/Addemployee.js"></script>
-    <link href="~/wwwrot/AddEmployee.css" rel="stylesheet" />
+    <link href="~/Content/AddEmployee.css" rel="stylesheet" />
 
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
@@ -147,8 +147,12 @@
             <div class="col-md-4">
                 <div class="form-group mb-3">
                     <label>Xem trước ảnh:</label>
-                    <div>
-                        <img id="preview" src="~/images/default-avatar.png" alt="Xem trước ảnh" style="width: 150px; height: 150px; border: 1px solid #ddd; padding: 5px;" />
+                    <div style="position: relative; display: inline-block; width: 150px; height: 150px; border: 1px solid #ddd; border-radius: 5px; overflow: hidden;">
+                        <!-- Ảnh xem trước -->
+                        <img id="preview" src="~/images/default-avatar.png" alt="Xem trước ảnh" style="width: 100%; height: 100%; object-fit: cover;" />
+
+                        <!-- Nút X nằm trong khung ảnh -->
+                        <button type="button" class="btn-close" style="position: absolute; top: 5px; right: 5px; background-color: red; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; line-height: 1; text-align: center; cursor: pointer; display: none;" onclick="removeImage()" aria-label="Close">×</button>
                     </div>
                     </div>
                 </div>
@@ -227,13 +231,31 @@
         </div>
         <script>
             function previewImage(event) {
-                var input = event.target;
-                var reader = new FileReader();
-                reader.onload = function () {
-                    var img = document.getElementById('preview');
-                    img.src = reader.result;
-                };
-                reader.readAsDataURL(input.files[0]);
+                const preview = document.getElementById('preview');
+                const btnClose = document.querySelector('.btn-close');
+
+                // Lấy file được chọn
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result; // Hiển thị ảnh xem trước
+                        btnClose.style.display = 'block'; // Hiển thị nút X
+                    };
+                    reader.readAsDataURL(file);
+                }
             }
+
+            function removeImage() {
+                const preview = document.getElementById('preview');
+                const inputFile = document.getElementById('AnhNhanVien');
+                const btnClose = document.querySelector('.btn-close');
+
+                // Xóa ảnh và input file
+                preview.src = '~/images/default-avatar.png'; // Ảnh mặc định
+                inputFile.value = ''; // Reset input file
+                btnClose.style.display = 'none'; // Ẩn nút X
+            }
+
 
         </script>

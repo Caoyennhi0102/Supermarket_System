@@ -7,9 +7,11 @@
     border-radius: 8px; /* Góc bo tròn cho form */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
 }
+
 .my-form .form-group {
     margin-bottom: 15px;
 }
+
 form {
     max-width: 1200px; /* Hoặc một giá trị phù hợp */
     margin: auto; /* Căn giữa form */
@@ -180,16 +182,17 @@ input[type="checkbox"], select {
 }
 
 .gender-note {
-   
     margin-left: 10px; /* Khoảng cách giữa checkbox và văn bản */
     color: red;
 }
+
 .gender-container {
     display: flex; /* Sử dụng flexbox để sắp xếp các phần tử ngang */
     align-items: center; /* Căn chỉnh checkbox và văn bản cùng chiều dọc */
 }
+
 body {
-    background-color: white; /* Màu nền nhẹ cho toàn bộ trang */
+    background-color: #EEEEEE; /* Màu nền nhẹ cho toàn bộ trang */
 }
 /* Bảng Nhân Viên */
 .table-container {
@@ -197,6 +200,7 @@ body {
     overflow-x: auto; /* Thêm thanh cuộn ngang khi bảng quá lớn */
     border: 1px solid #ddd; /* Viền xung quanh bảng */
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -326,17 +330,35 @@ th:nth-child(12), td:nth-child(12) {
     color: black; /* Màu chữ đen cho các tên cột */
     font-weight: bold;
 }
+
 th:nth-child(13), td:nth-child(13) {
     background-color: floralwhite;
     text-align: center;
     color: black; /* Màu chữ đen cho các tên cột */
     font-weight: bold;
 }
+
 th:nth-child(14), td:nth-child(14) {
     background-color: floralwhite;
     text-align: center;
     color: black; /* Màu chữ đen cho các tên cột */
     font-weight: bold;
+}
+/* Tùy chỉnh nút X */
+.btn-close {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    display: none; /* Ẩn mặc định, sẽ hiển thị khi có ảnh */
+    z-index: 10;
+}
+
+img#preview {
+    object-fit: cover;
 }
 
 
@@ -358,8 +380,3 @@ tr:hover {
 .container {
     padding: 20px;
 }
-
-
-
-
-

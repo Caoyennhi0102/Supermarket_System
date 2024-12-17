@@ -192,11 +192,12 @@ input[type="checkbox"], select {
 }
 
 body {
-    background-color: #66b3ff; /* Màu nền nhẹ cho toàn bộ trang */
+    background-color: #EEEEEE; /* Màu nền nhẹ cho toàn bộ trang */
 }
-h3{
-    text-align:center;
-    color:red;
+
+h3 {
+    text-align: center;
+    color: red;
 }
 /* Tạo kiểu cho bảng */
 .table-container {
@@ -214,7 +215,6 @@ h3{
         border: 1px solid #007bff; /* Màu viền xanh dương */
         padding: 8px; /* Thêm khoảng cách giữa nội dung và viền */
         text-align: center; /* Căn giữa nội dung */
-        
     }
 
     /* Định dạng tiêu đề các cột */
@@ -263,4 +263,28 @@ h3{
 /* Tạo kiểu cho các tiêu đề có thể kéo được */
 .table th {
     cursor: pointer;
+}
+/* Tùy chỉnh nút X */
+/* Đảm bảo nút X nằm trong ảnh xem trước */
+.btn-close {
+    position: absolute;
+    top: 5px; /* Khoảng cách từ trên xuống */
+    right: 5px; /* Khoảng cách từ phải sang */
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.5;
+    cursor: pointer;
+    display: none; /* Ẩn nút ban đầu */
+    z-index: 10; /* Hiển thị trên cùng */
+}
+
+img#preview {
+    object-fit: cover; /* Hiển thị ảnh vừa khung */
+    border-radius: 5px;
 }
