@@ -40,52 +40,72 @@ namespace Supermarket_System.Service
         {
             try
             {
+                // Kiểm tra số điện thoại hợp lệ
                 if (!CheckPhoneNumber.IsPhoneNumberValid(nhanvien.SDT))
                 {
                     Console.WriteLine($"Số điện thoại không hợp lệ: {nhanvien.SDT}");
                     return "Số điện thoại không hợp lệ.";
                 }
+
+                // Kiểm tra ngày sinh hợp lệ (nhân viên phải trên 18 tuổi và không phải ngày trong tương lai)
                 if (!CheckDateOfBirth.IsDateOfBirth(nhanvien.NgaySinh))
                 {
                     return "Ngày sinh không hợp lệ. Nhân viên phải trên 18 tuổi và không phải ngày trong tương lai.";
                 }
+
+                // Kiểm tra địa chỉ hợp lệ (có ít nhất 5 ký tự)
                 if (!CheckAddress.IsAddress(nhanvien.DiaChi))
                 {
-                    
                     return "Địa chỉ không hợp lệ. Địa chỉ phải có ít nhất 5 ký tự.";
                 }
+
+                // Kiểm tra căn cước công dân hợp lệ
                 if (!CheckCitizenIdentification.CheckCCCD(nhanvien.CCCD))
                 {
                     return "Căn cước công dân không hợp lệ";
                 }
+
+                // Kiểm tra email hợp lệ
                 if (!CheckEmail.IsEmail(nhanvien.Email))
                 {
                     return "Email không hợp lệ.";
                 }
+
+                // Kiểm tra vai trò hợp lệ
                 var validRoles = new List<string> { "Admin", "Manager", "User" };
-                Console.WriteLine($"Vai trò hợp lệ: {string.Join(", ", validRoles)}");
                 if (!validRoles.Contains(role))
                 {
                     return "Vai trò không hợp lệ.";
                 }
+                if (string.IsNullOrEmpty(nhanvien.MaBP))
+                {
+                    return "Mã bộ phận không được để trống.";
+                }
+                // Kiểm tra mã bộ phận hợp lệ
                 var validMaBoPhan = _sqlConnectionServer.BoPhans.Select(bp => bp.MaBP).ToList();
-                Console.WriteLine($"Danh sách mã bộ phận: {string.Join(", ", validMaBoPhan)}");
-                var validMaChucVu = _sqlConnectionServer.ChucVus.Select(cv => cv.MaChucVu).ToList();
                 if (!validMaBoPhan.Contains(nhanvien.MaBP))
                 {
                     return "Mã bộ phận không hợp lệ.";
                 }
-                var validChucVuForBoPhan = _sqlConnectionServer.ChucVus.Where(cv => cv.MaBP == nhanvien.MaBP)
+
+                // Kiểm tra mã chức vụ hợp lệ trong bộ phận
+                var validChucVuForBoPhan = _sqlConnectionServer.ChucVus
+                    .Where(cv => cv.MaBP == nhanvien.MaBP)
                     .Select(cv => cv.MaChucVu).ToList();
                 if (!validChucVuForBoPhan.Contains(nhanvien.MaChucVu))
                 {
                     return "Mã chức vụ không phù hợp với mã bộ phận.";
                 }
+
+                // Tạo mã nhân viên
                 nhanvien.MaNV = GenerateMaNhanVien(sothutu);
-                nhanvien.TenNV = nhanvien.TenNV;
-                nhanvien.UserName = $"{nhanvien.TenNV.Replace(" ", " ")}_{nhanvien.MaNV}";
+
+                // Tạo tên đăng nhập và mật khẩu mặc định
+                nhanvien.UserName = $"{nhanvien.TenNV.Replace(" ", "")}_{nhanvien.MaNV}";
                 nhanvien.Passwords = GenerateRandomPassword();
                 nhanvien.PasswordHash = HashPassword(nhanvien.Passwords);
+
+                // Cập nhật các thông tin khác
                 nhanvien.TrangThaiTaiKhoan = true;
                 nhanvien.NgayTao = DateTime.Now;
                 nhanvien.DangNhapLanDau = true;
@@ -101,32 +121,29 @@ namespace Supermarket_System.Service
                 nhanvien.MaBP = nhanvien.MaBP;
                 nhanvien.CCCD = nhanvien.CCCD;
                 nhanvien.Avatar = nhanvien.Avatar;
-                
-                
+
+                // Thêm nhân viên vào cơ sở dữ liệu
                 _sqlConnectionServer.NhanViens.Add(nhanvien);
                 _sqlConnectionServer.SaveChanges();
-                
+
+                // Gửi email thông báo tới quản lý duyệt nhân viên
                 string subject = $"Duyệt nhân viên mới: {nhanvien.TenNV}";
                 string body = $@"
-    <html>
-    <body>
-        <p>Kính gửi Quản lý,</p>
-        <p>Nhân viên {nhanvien.TenNV} với mã nhân viên {nhanvien.MaNV} đã được thêm vào hệ thống. Xin vui lòng duyệt thông tin của họ.</p>
-        
-        <p>
-            <a href='https://your-website.com/duyet/{nhanvien.MaNV}?trangthai=duyet' 
-               style='background-color: #4CAF50; color: white; padding: 15px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Duyệt nhân viên</a>
-        </p>
-
-        <p>
-            <a href='https://your-website.com/duyet/{nhanvien.MaNV}?trangthai=koduyet' 
-               style='background-color: #f44336; color: white; padding: 15px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Không duyệt</a>
-        </p>
-
-        <p>Trân trọng.</p>
-    </body>
-    </html>";
-
+<html>
+<body>
+    <p>Kính gửi Quản lý,</p>
+    <p>Nhân viên {nhanvien.TenNV} với mã nhân viên {nhanvien.MaNV} đã được thêm vào hệ thống. Xin vui lòng duyệt thông tin của họ.</p>
+    <p>
+        <a href='https://your-website.com/duyet/{nhanvien.MaNV}?trangthai=duyet' 
+           style='background-color: #4CAF50; color: white; padding: 15px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Duyệt nhân viên</a>
+    </p>
+    <p>
+        <a href='https://your-website.com/duyet/{nhanvien.MaNV}?trangthai=koduyet' 
+           style='background-color: #f44336; color: white; padding: 15px 20px; text-align: center; text-decoration: none; display: inline-block; border-radius: 5px;'>Không duyệt</a>
+    </p>
+    <p>Trân trọng.</p>
+</body>
+</html>";
 
                 string managerEmail = GetManagerEmail(maQL);
                 if (string.IsNullOrEmpty(managerEmail))
@@ -134,46 +151,47 @@ namespace Supermarket_System.Service
                     return "Quản lý không hợp lệ hoặc không tìm thấy email quản lý.";
                 }
                 SendEmailToManager.IsSendEmail(managerEmail, subject, body);
+
+                // Nếu trạng thái là duyệt hoặc không duyệt
                 if (status == "duyet")
                 {
                     subject = "Chúc mừng bạn đã được thêm vào hệ thống đã được quản lý duyệt";
                     body = $@"
-            <html>
-            <body>
-                <p>Chào {nhanvien.TenNV},</p>
-                <p>Yêu cầu cấp  tài khoản của bạn đã được quản lý phê duyệt. Vui lòng sử dụng mật khẩu mặc định để đăng nhập lần đầu.</p>
-                <p>Mật khẩu mặc định của bạn là: <b>{nhanvien.Passwords}</b></p>
-                <p>Hãy đổi mật khẩu ngay sau khi đăng nhập để bảo mật tài khoản.</p>
-                <p>Trân trọng.</p>
-            </body>
-            </html>";
+        <html>
+        <body>
+            <p>Chào {nhanvien.TenNV},</p>
+            <p>Yêu cầu cấp  tài khoản của bạn đã được quản lý phê duyệt. Vui lòng sử dụng mật khẩu mặc định để đăng nhập lần đầu.</p>
+            <p>Mật khẩu mặc định của bạn là: <b>{nhanvien.Passwords}</b></p>
+            <p>Hãy đổi mật khẩu ngay sau khi đăng nhập để bảo mật tài khoản.</p>
+            <p>Trân trọng.</p>
+        </body>
+        </html>";
                 }
                 else if (status == "koduyet")
                 {
                     subject = "Yêu cầu cấp tài khoản đã bị quản lý từ chối";
                     body = $@"
-            <html>
-            <body>
-                <p>Chào {nhanvien.TenNV},</p>
-                <p>Rất tiếc, yêu cầu reset tài khoản của bạn đã bị quản lý từ chối.</p>
-                <p>Nếu bạn cần hỗ trợ thêm, vui lòng liên hệ quản lý của bạn.</p>
-                <p>Trân trọng.</p>
-            </body>
-            </html>";
+        <html>
+        <body>
+            <p>Chào {nhanvien.TenNV},</p>
+            <p>Rất tiếc, yêu cầu reset tài khoản của bạn đã bị quản lý từ chối.</p>
+            <p>Nếu bạn cần hỗ trợ thêm, vui lòng liên hệ quản lý của bạn.</p>
+            <p>Trân trọng.</p>
+        </body>
+        </html>";
                 }
-                ApproveStaff(nhanvien.MaNV, status, subject, body);
-                
 
-            
+                // Xử lý duyệt nhân viên
+                ApproveStaff(nhanvien.MaNV, status, subject, body);
 
                 return "Nhân viên đã được thêm vào hệ thống và email đã được gửi tới quản lý để duyệt.";
-
             }
             catch (Exception ex)
             {
                 return $"Lỗi: {ex.Message}";
             }
         }
+
         public NhanVien SearchEmployeeByMaNhanVien(string searchTerm)
         {
             if (string.IsNullOrEmpty(searchTerm))
@@ -774,7 +792,7 @@ namespace Supermarket_System.Service
         }
 
         // Phương thức thêm bộ phận
-        public bool AddParts(string TenBP)
+        public bool  AddParts(string TenBP)
         {
             var PartNumber = CreatePartNumber(TenBP);
             var newParts = new BoPhan
@@ -783,7 +801,7 @@ namespace Supermarket_System.Service
                 TenBoPhan = TenBP
             };
             _sqlConnectionServer.BoPhans.Add(newParts);
-            return _sqlConnectionServer.SaveChanges() > 0;
+           return  _sqlConnectionServer.SaveChanges() > 0;
         }
         // Phương thức sửa bộ phận
         public bool UpdateParts(string maBP, string TenBp)

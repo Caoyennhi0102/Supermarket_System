@@ -277,6 +277,7 @@
     <Compile Include="Service\SendEmailToManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\AddDepartment.css" />
     <Content Include="Content\AddEmployee.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -352,6 +353,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Admin\UpdateEmployee.cshtml" />
     <Content Include="Views\Admin\DeleteEmployee.cshtml" />
+    <Content Include="Views\Admin\AddDepartment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />

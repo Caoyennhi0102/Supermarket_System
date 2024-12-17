@@ -1,4 +1,4 @@
-﻿
+﻿@model Supermarket_System.Models.NhanVien
 
 @{
     ViewData["Title"] = "Xóa Nhân Viên";
@@ -114,14 +114,15 @@
                         <input type="text" id="SDT" name="nhanVien.SDT" class="form-control" placeholder="Nhập số điện thoại" required />
                     </div>
                 </div>
-                <!-- Mã Bộ Phận -->
                 <div class="col-md-4">
                     <div class="form-group mb-3">
-                        <label for="MaBoPhan">Mã Bộ Phận:</label>
-                        <select id="MaBoPhan" name="nhanVien.MaBP" class="form-control" required>
-                            <option value="">Chọn bộ phận</option>
-                            <!-- Thêm các tùy chọn từ cơ sở dữ liệu -->
-                        </select>
+                        <label for="MaBP">Mã Bộ Phận:</label>
+                        @Html.DropDownListFor(
+                        model => model.MaBP,
+                        (SelectList)ViewBag.MaBP,
+                        "-- Chọn Bộ Phận --",
+                        new { @class = "form-control" }
+                    )
                     </div>
                 </div>
                 <!-- Mã Chức Vụ -->

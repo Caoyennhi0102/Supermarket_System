@@ -3,6 +3,7 @@ using Supermarket_System.Models;
 using Supermarket_System.Service;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -53,9 +54,12 @@ namespace Supermarket_System.Controllers
            
             var nhanvien = _adminService.GetAllEmployeest();
             ViewBag.employeeList = nhanvien;
+            var boPhans = _sqlConnectionServer.BoPhans.ToList();
+            ViewBag.MaBP = new SelectList(boPhans, "MaBP", "TenBoPhan");
             return View();
         }
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task <ActionResult> AddEmployee(NhanVien nhanVien, int sothuTu, string maQl, string role, string status, IFormFile formFile)
         {
             try
@@ -68,47 +72,40 @@ namespace Supermarket_System.Controllers
                         nhanVien.Avatar = memoryStream.ToArray();
                     }
                 }
+                
+                var boPhans = _sqlConnectionServer.BoPhans.ToList();
+                
+                ViewBag.MaBP = new SelectList(boPhans, "MaBP", "TenBoPhan");
+
+                
+                
                 // Gọi phương thức từ AdminService
-                var reult = _adminService.AddNhanVien(nhanVien, sothuTu, maQl, role, status);
+                var result = _adminService.AddNhanVien(nhanVien, sothuTu, maQl, role, status);
 
-                if (string.IsNullOrWhiteSpace(reult))
+                if (string.IsNullOrWhiteSpace(result))
                 {
-                    return Json(new { success = false, message = "Không có thông tin phản hồi từ hệ thống." });
+                    ModelState.AddModelError("", "Không có thông tin phản hồi từ hệ thống.");
+                    return View(nhanVien);
                 }
 
-                if (reult.StartsWith("Lỗi"))
+                if (result.StartsWith("Lỗi"))
                 {
-                    return Json(new { success = false, message = reult });
+                    ModelState.AddModelError("", result);
+                    return View(nhanVien);
                 }
-                return Json(new
-                {
-                    success = true,
-                    nhanVien = new
-                    {
-                         nhanVien.MaNV,
-                         nhanVien.MaBP,
-                         nhanVien.MaChucVu,
-                         nhanVien.TenNV,
-                         nhanVien.CCCD,
-                         nhanVien.GioiTinh,
-                         nhanVien.NgaySinh,
-                         nhanVien.DiaChi,
-                         nhanVien.SDT,
-                         nhanVien.Email,
-                         nhanVien.Roles,
-                         nhanVien.UserName,
-                         nhanVien.TrangThaiTaiKhoan,
-                         nhanVien.NgayTao
-                         
-                        
 
-                    }
-                });
+                return Json(new { success = true, message = "Thêm nhân viên thành công" });
+           
 
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Đã xảy ra lỗi: {ex.Message}" });
+                ModelState.AddModelError("", $"Đã xảy ra lỗi: {ex.Message}");
+
+                // Truyền lại ViewBag nếu có lỗi
+                var boPhans = _sqlConnectionServer.BoPhans.ToList();
+                ViewBag.MaBP = new SelectList(boPhans, "MaBP", "TenBoPhan");
+                return View(nhanVien);
             }
         }
         [HttpPost]
@@ -130,6 +127,8 @@ namespace Supermarket_System.Controllers
         [HttpGet]
         public ActionResult UpdateEmployee()
         {
+            var boPhans = _sqlConnectionServer.BoPhans.ToList();
+            ViewBag.MaBP = new SelectList(boPhans, "MaBP", "TenBoPhan");
             return View();
         }
         [HttpPost]
@@ -137,6 +136,8 @@ namespace Supermarket_System.Controllers
         {
             try
             {
+                
+
                 string   result = _adminService.UpdateNhanVien(updatenhanVien, maQL, status);
                 if(result != "success")
                 {
@@ -152,6 +153,8 @@ namespace Supermarket_System.Controllers
         [HttpGet]
         public ActionResult DeleteEmployee()
         {
+            var boPhans = _sqlConnectionServer.BoPhans.ToList();
+            ViewBag.MaBP = new SelectList(boPhans, "MaBP", "TenBoPhan");
             return View();
         }
         [HttpPost]
@@ -175,6 +178,59 @@ namespace Supermarket_System.Controllers
             {
                 return Json(new { success = false, message = $"Lỗi khi xóa nhân viên{ex.Message}" });
             }
+        }
+        // View thêm bộ phận 
+        [HttpGet]
+        public ActionResult AddDepartment()
+        {
+            return View();
+        }
+        // Controller thêm bộ phận 
+        [HttpPost]
+        public ActionResult AddDepartment(string TenBP)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(TenBP))
+                {
+                    return Json(new { success = false, message = "Tên Bộ Phận Không Được Để Trống" });
+                }
+                var Department = _adminService.AddParts(TenBP);
+                if(Department)
+                {
+                    return Json(new { success = true, message = "Thêm bộ phận thành công" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Thêm bộ phận không thành công" });
+                }
+                
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, mesage = $"Có lỗi trong quá trình thêm bộ phận{ex.Message}" });
+            }
+        }
+        // Controller lấy danh sách bộ phận thêm vào bảng danh sach bộ phận 
+        public ActionResult GetDepartments()
+        {
+            try
+            {
+                var getDepartments = _sqlConnectionServer.BoPhans.Select(BP => new { BP.MaBP, BP.TenBoPhan }).ToList();
+                return Json(getDepartments, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = $"Có lỗi xảy trong quá trinh gọi danh sách bộ phận{ex.Message}" });
+            }
+        }
+        public JsonResult GetChucVuByBoPhan(string maBoPhan)
+        {
+            // Lấy các chức vụ theo mã bộ phận từ cơ sở dữ liệu
+            var chucVus = _sqlConnectionServer.ChucVus.Where(cv => cv.MaBP == maBoPhan).ToList();
+
+            // Trả về dữ liệu dưới dạng JSON
+            return Json(chucVus, JsonRequestBehavior.AllowGet);
         }
     }
 }

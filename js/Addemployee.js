@@ -1,18 +1,4 @@
-﻿document.getElementById("MaBoPhan").addEventListener("change", function () {
-    var maBoPhan = this.value;
-    fetch(`/GetChucVuByBoPhan?maBoPhan=${maBoPhan}`)
-        .then(response => response.json())
-        .then(data => {
-            var chucVuDropdown = document.getElementById("MaChucVu");
-            chucVuDropdown.innerHTML = "";
-            data.forEach(chucVu => {
-                var option = document.createElement("option");
-                option.value = chucVu.MaChucVu;
-                option.textContent = chucVu.TenChucVu;
-                chucVuDropdown.appendChild(option);
-            });
-        });
-});
+﻿
 // Custom JavaScript for form validation or other actions
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("form");
