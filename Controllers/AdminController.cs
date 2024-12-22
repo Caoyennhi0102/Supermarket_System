@@ -11,10 +11,12 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.Services.Description;
-
+using System.Web.UI.WebControls.Expressions;
+// Trang Controller Admin các chức năng của trang Admin
 namespace Supermarket_System.Controllers
 {
-  //  [Authorize(Roles = "Admin")]
+    // Đánh dấu phân quyền đăng nhập Admin
+    //  [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly AdminService _adminService;
@@ -25,14 +27,14 @@ namespace Supermarket_System.Controllers
             _sqlConnectionServer = sqlConnectionServer;
         }
         public AdminController() { }
-      /*  protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            if (Session["UserName"] == null)
-            {
-                filterContext.Result = RedirectToAction("Login", "Login");
-            }
-            base.OnActionExecuting(filterContext);
-        }*/
+        /*  protected override void OnActionExecuting(ActionExecutingContext filterContext)
+          {
+              if (Session["UserName"] == null)
+              {
+                  filterContext.Result = RedirectToAction("Login", "Login");
+              }
+              base.OnActionExecuting(filterContext);
+          }*/
         public ActionResult Dashboard()
         {
             bool IsSessionActive = (Session["UserName"] != null);
@@ -45,13 +47,13 @@ namespace Supermarket_System.Controllers
             Session.Clear();
             return RedirectToAction("Login", "Admin");
         }
-        
-        
+
+
         // GET: Admin
         [HttpGet]
         public ActionResult AddEmployee()
         {
-           
+
             var nhanvien = _adminService.GetAllEmployeest();
             ViewBag.employeeList = nhanvien;
             var boPhans = _sqlConnectionServer.BoPhans.ToList();
@@ -60,23 +62,23 @@ namespace Supermarket_System.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task <ActionResult> AddEmployee(NhanVien nhanVien, int sothuTu, string maQl, string role, string status, IFormFile formFile)
+        public async Task<ActionResult> AddEmployee(NhanVien nhanVien, int sothuTu, string maQl, string role, string status, IFormFile formFile)
         {
             try
             {
-                if(formFile != null && formFile.Length > 0)
+                if (formFile != null && formFile.Length > 0)
                 {
-                    using(var memoryStream = new MemoryStream())
+                    using (var memoryStream = new MemoryStream())
                     {
                         await formFile.CopyToAsync(memoryStream);
                         nhanVien.Avatar = memoryStream.ToArray();
                     }
                 }
-                
-               
 
-                
-                
+
+
+
+
                 // Gọi phương thức từ AdminService
                 var result = _adminService.AddNhanVien(nhanVien, sothuTu, maQl, role, status);
 
@@ -93,7 +95,7 @@ namespace Supermarket_System.Controllers
                 }
 
                 return Json(new { success = true, message = "Thêm nhân viên thành công" });
-           
+
 
             }
             catch (Exception ex)
@@ -115,13 +117,13 @@ namespace Supermarket_System.Controllers
                 return Json(new { success = false, message = "Mã nhân viên không hợp lệ." });
             }
             var nhanvien = _adminService.SearchEmployeeByMaNhanVien(maNV);
-            if(nhanvien == null)
+            if (nhanvien == null)
             { // Trả về một thông báo lỗi trong view
                 return Json(new { success = false, message = "Không tìm thấy nhân viên với mã nhân viên đã cung cấp." });
             }
             return Json(new { success = true, employee = nhanvien });
         }
-        
+
         [HttpGet]
         public ActionResult UpdateEmployee()
         {
@@ -130,20 +132,20 @@ namespace Supermarket_System.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult  UpdateEmployee(NhanVien updatenhanVien, string maQL, string status)
+        public ActionResult UpdateEmployee(NhanVien updatenhanVien, string maQL, string status)
         {
             try
             {
-                
 
-                string   result = _adminService.UpdateNhanVien(updatenhanVien, maQL, status);
-                if(result != "success")
+
+                string result = _adminService.UpdateNhanVien(updatenhanVien, maQL, status);
+                if (result != "success")
                 {
-                    return Json(new { success = false, message = result});
+                    return Json(new { success = false, message = result });
                 }
                 return Json(new { success = true, message = "Cập nhật thông tin nhân viên thành công." });
 
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 return Json(new { success = false, message = $"Đã xảy ra lỗi khi cập nhật thông tin: {ex.Message}" });
             }
@@ -160,19 +162,19 @@ namespace Supermarket_System.Controllers
         {
             try
             {
-                if(string.IsNullOrEmpty(maNV) || string.IsNullOrEmpty(MaQL))
+                if (string.IsNullOrEmpty(maNV) || string.IsNullOrEmpty(MaQL))
                 {
                     return Json(new { success = false, message = "Mã nhân viên hoặc mã quản lý không hợp lệ." });
                 }
-                var  result = _adminService.DeleteNhanVien(maNV, MaQL);
+                var result = _adminService.DeleteNhanVien(maNV, MaQL);
                 if (result != "Nhân viên đã được xóa thành công.")
                 {
-                    return Json(new { success = false, message = result});
+                    return Json(new { success = false, message = result });
 
                 }
                 return Json(new { success = true, message = "Nhân viên đã được xóa thành công!" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { success = false, message = $"Lỗi khi xóa nhân viên{ex.Message}" });
             }
@@ -194,7 +196,7 @@ namespace Supermarket_System.Controllers
                     return Json(new { success = false, message = "Tên Bộ Phận Không Được Để Trống" });
                 }
                 var Department = _adminService.AddParts(TenBP);
-                if(Department)
+                if (Department)
                 {
                     return Json(new { success = true, message = "Thêm bộ phận thành công" });
                 }
@@ -202,9 +204,9 @@ namespace Supermarket_System.Controllers
                 {
                     return Json(new { success = false, message = "Thêm bộ phận không thành công" });
                 }
-                
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { success = false, mesage = $"Có lỗi trong quá trình thêm bộ phận{ex.Message}" });
             }
@@ -217,7 +219,7 @@ namespace Supermarket_System.Controllers
                 var getDepartments = _sqlConnectionServer.BoPhans.Select(BP => new { BP.MaBP, BP.TenBoPhan }).ToList();
                 return Json(getDepartments, JsonRequestBehavior.AllowGet);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return Json(new { success = false, message = $"Có lỗi xảy trong quá trinh gọi danh sách bộ phận{ex.Message}" });
             }
@@ -232,44 +234,81 @@ namespace Supermarket_System.Controllers
             return Json(chucVus, JsonRequestBehavior.AllowGet);
         }
         */
-        public ActionResult AddPosition()
-        {
-            return View();
-        }
-        public ActionResult AddPosition(string TenCV)
+        [HttpGet]
+        public ActionResult GetByDepartmentID(string maBP)
         {
             try
             {
-                if (string.IsNullOrEmpty(TenCV))
+                
+                if (string.IsNullOrEmpty(maBP))
                 {
-                    return Json(new { success = false, message = "Tên chức vụ không được để trống " });
-
+                    return Json(new { success = false, message = "Mã bộ phận không được để trống" });
                 }
-                var position = _adminService.AddPosition(TenCV);
-                if (position)
+                var ListBoPhan = _sqlConnectionServer.BoPhans;
+                if(ListBoPhan == null)
                 {
-                    return Json(new { success = true, massage = "Thêm chức vụ thành công" });
+                    return Json(new { success = false, message = "Dữ liệu bộ phận không tồn tại." });
+                }
+                var bophan = _sqlConnectionServer.BoPhans.FirstOrDefault(bp => bp.MaBP == maBP);
+                if (bophan != null)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        maBP = bophan.MaBP,
+                        tenBP = bophan.TenBoPhan
+                    }, JsonRequestBehavior.AllowGet); // Bắt buộc phải có AllowGet
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Thêm chức vụ thành công" });
+                    return Json(new
+                    {
+                        success = false,
+                        message = "Không tìm thấy bộ phận với mã này."
+                    }, JsonRequestBehavior.AllowGet);
                 }
-
-            }catch(Exception ex)
+            } 
+             catch (Exception ex)
             {
-                return Json(new { success = false, mesage = $"Có lỗi trong quá trình thêm chức vụ{ex.Message}" });
+                // Log lỗi chi tiết để kiểm tra
+                System.Diagnostics.Debug.WriteLine($"Lỗi: {ex.Message}");
+
+                return Json(new
+                {
+                    success = false,
+                    message = "Có lỗi xảy ra khi truy vấn cơ sở dữ liệu."
+                }, JsonRequestBehavior.AllowGet);
             }
         }
-        public ActionResult GetPosition()
+        
+        [HttpGet]
+        public ActionResult UpdateDepartmentName()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult UpdateDepartmentName(string maBP, string TenBP)
         {
             try
             {
-                var getPosition = _sqlConnectionServer.ChucVus.Select(CV => new { CV.MaChucVu, CV.TenChucVu });
-                return Json(getPosition, JsonRequestBehavior.AllowGet);
-            }catch(Exception ex)
+                if (string.IsNullOrEmpty(maBP) || string.IsNullOrEmpty(TenBP))
+                {
+                    return Json(new { success = false, message = "Mã bộ phận và tên bộ phận không được để trống." });
+                }
+
+                var bophan = _adminService.UpdateParts(maBP, TenBP);
+                if (bophan)
+                {
+                    return Json(new { success = true, message = "Cập nhật tên bộ phận thành công!" });
+                }
+                return Json(new { success = false, message = "Bộ phận không tồn tại" });
+            }
+            catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Có lỗi xảy ra trong quá trình gọi danh sách chức vụ{ex.Message}" });
+                return Json(new { success = false, message = $"Có lỗi trong quá trình cập nhật tên bộ phận{ex.Message}" });
             }
         }
+
+
     }
 }

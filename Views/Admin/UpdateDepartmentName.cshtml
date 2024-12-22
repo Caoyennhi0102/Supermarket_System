@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "UpdateDepartmentName";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
+}
+@*
+    @{
+        bool isSessionActive = (bool)ViewBag.IsSessionActive;
+    }
+*@
+<h2>CẬP NHẬT BỘ PHẬN</h2>
+<form id="updateForm">
+    <input type="text" id="maBP" placeholder="Nhập Mã Bộ Phận" />
+    <button type="button" id="btnSearch">Tìm Kiếm</button>
+    <br />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("#btnSearch").click(function () {
+            var maBP = $("#maBP").val().trim(); // Loại bỏ khoảng trắng
+            if (!maBP) {
+                alert("Vui lòng nhập Mã Bộ Phận!");
+                return;
+            }
+
+            console.log("Đang gửi yêu cầu với Mã Bộ Phận:", maBP);
+
+            $.ajax({
+                url: "/Admin/GetByDepartmentID",
+                type: "GET",
+                data: { maBP: maBP },
+                success: function (response) {
+                    console.log("Phản hồi từ server:", response);
+                    if (response.success) {
+                        $("#resultContainer").show();
+                        $("#resultMaBP").text(response.maBP);
+                        $("#resultTenBP").text(response.tenBP);
+                        $("#tenBP").prop("disabled", false);
+                    } else {
+                        alert(response.message);
+                        $("#resultContainer").hide();
+                        $("#tenBP").val("").prop("disabled", true);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Lỗi xảy ra:", status, error);
+                    alert("Có lỗi xảy ra khi tìm kiếm.");
+                }
+            });
+        });
+
+    </script>
+    <div id="resultContainer" style="margin-top: 20px; display: none;">
+        <table border="1" style="width: 50%; text-align: center;">
+            <thead>
+                <tr>
+                    <th>Mã Bộ Phận</th>
+                    <th>Tên Bộ Phận</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="resultMaBP"></td>
+                    <td id="resultTenBP"></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <label for="tenBP">Tên Bộ Phận Mới:</label>
+        <input type="text" id="tenBP" placeholder="Tên Bộ Phận Mới" disabled />
+        <button type="submit">Cập Nhật</button>
+    </div>
+</form>
+
+
+<script>
+    
+
+    $("#updateForm").submit(function (e) {
+        e.preventDefault();
+
+        var maBP = $("#resultMaBP").text().trim();
+        var tenBP = $("#tenBP").val().trim();
+
+        if (!maBP || !tenBP) {
+            alert("Vui lòng nhập đầy đủ thông tin.");
+            return;
+        }
+
+        $.ajax({
+            url: "/Admin/UpdateDepartmentName",
+            type: "POST",
+            data: { maBP: maBP, TenBP: tenBP },
+            success: function (response) {
+                alert(response.message);
+                if (response.success) {
+                    $("#resultTenBP").text(tenBP);
+                    $("#tenBP").prop("disabled", true);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi khi gọi API:", status, error);
+                alert("Có lỗi xảy ra khi cập nhật.");
+            }
+        });
+    });
+</script>

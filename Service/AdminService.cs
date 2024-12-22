@@ -804,14 +804,16 @@ namespace Supermarket_System.Service
            return  _sqlConnectionServer.SaveChanges() > 0;
         }
         // Phương thức sửa bộ phận
-        public bool UpdateParts(string maBP, string TenBp)
+        public bool UpdateParts(string maBP, string tenBp)
         {
             var Bophan = _sqlConnectionServer.BoPhans.FirstOrDefault(bp => bp.MaBP == maBP);
             if(Bophan != null)
             {
-                Bophan.TenBoPhan = TenBp;
-                return _sqlConnectionServer.SaveChanges() > 0;
+                Bophan.TenBoPhan = tenBp;
+                 return _sqlConnectionServer.SaveChanges() > 0;
+                
             }
+
             return false;
         }
         //Phương thức xoa bộ phận 
