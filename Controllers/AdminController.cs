@@ -265,7 +265,7 @@ namespace Supermarket_System.Controllers
                     {
                         success = false,
                         message = "Không tìm thấy bộ phận với mã này."
-                    }, JsonRequestBehavior.AllowGet);
+                    }, JsonRequestBehavior.AllowGet);// Bắt buộc phải có AllowGet
                 }
             } 
              catch (Exception ex)
@@ -308,7 +308,76 @@ namespace Supermarket_System.Controllers
                 return Json(new { success = false, message = $"Có lỗi trong quá trình cập nhật tên bộ phận{ex.Message}" });
             }
         }
+        [HttpGet]
+        public ActionResult DeleteDepartment()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteDepartment(string maBP)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(maBP))
+                {
+                    return Json(new { success = false, message = "Mã bộ phận và tên bộ phận không được để trống." });
+                }
+                var bophan = _adminService.DeleteParts(maBP);
+                if (bophan)
+                {
+                    return Json(new { success =true , message = "Xóa bộ phận thành công" });
+                    
+                }
+                return Json(new { success = false, message = "Bộ phận không tồn tại" });
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = $"Có lỗi xảy ra trong quá trình xóa bộ phận{ex.Message}" });
+            }
+        }
+        [HttpGet]
+        public ActionResult AddPosition()
+        {
+            var bophan = _sqlConnectionServer.BoPhans.ToList();
+            ViewBag.Bophans = bophan;
+            var ListCV = (from chucvu in _sqlConnectionServer.ChucVus
+                          join bophans in _sqlConnectionServer.BoPhans
+                          on chucvu.MaBP equals bophans.MaBP
+                          select new
+                          {
+                              chucvu.MaBP,
+                              bophans.TenBoPhan,
+                              chucvu.MaChucVu,
+                              chucvu.TenChucVu
+                          }).ToList();
+            ViewBag.listCV = ListCV;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult AddPosition(string TenCV, string MaBP)
+        {
+            try
+            {
 
+                if(string.IsNullOrEmpty(TenCV) || string.IsNullOrEmpty(MaBP))
+                {
+                    return Json(new { success = false, message = "Tên chức vụ và bộ phận không được để trống." });
+                }
+                var resultCV = _adminService.AddPosition(TenCV, MaBP);
+                if (resultCV)
+                {
+                    // Lấy tên bộ phận và mã chức vụ mới đã tạo
+                    var boPhan = _sqlConnectionServer.BoPhans.FirstOrDefault(b => b.MaBP == MaBP);
+                    var chucVu = _sqlConnectionServer.ChucVus.FirstOrDefault(c => c.TenChucVu == TenCV);
 
+                    return Json(new { success = true, maChucVu = chucVu.MaChucVu, tenBoPhan = boPhan?.TenBoPhan });
+                }
+                return Json(new { success = false, message = "Có lỗi xảy ra khi thêm chức vụ." });
+            }
+            catch(Exception ex)
+            {
+                return Json(new { success = false, message = $"Có lỗi xảy ra khi thêm chức vụ.{ex.Message}" });
+            }
+        }
     }
 }

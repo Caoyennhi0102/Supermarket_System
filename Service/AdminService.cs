@@ -819,13 +819,31 @@ namespace Supermarket_System.Service
         //Phương thức xoa bộ phận 
         public bool DeleteParts(string MaBP)
         {
-            var BoPhan = _sqlConnectionServer.BoPhans.FirstOrDefault(bp => bp.MaBP == MaBP);
-            if (BoPhan != null)
+            try
             {
-                _sqlConnectionServer.BoPhans.Remove(BoPhan);
-                 return _sqlConnectionServer.SaveChanges() > 0;
+                var bophan = _sqlConnectionServer.BoPhans.Find(MaBP);
+                if (bophan != null)
+                {
+                    var DeletemaBP = _sqlConnectionServer.NhanViens.Where(u => u.MaBP == MaBP);
+                    if (DeletemaBP.Any())
+                    {
+                        _sqlConnectionServer.NhanViens.RemoveRange(DeletemaBP);
+                    }
+                    var DeleteMaCV = _sqlConnectionServer.ChucVus.Where(u => u.MaBP == MaBP);
+                    if (DeleteMaCV.Any())
+                    {
+                        _sqlConnectionServer.ChucVus.RemoveRange(DeleteMaCV);
+                    }
+                    _sqlConnectionServer.BoPhans.Remove(bophan);
+                    return _sqlConnectionServer.SaveChanges() > 0;
+                }
+                return false;
             }
-            return false;
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Có lỗi xảy ra trong quá trình xóa bộ phận{ex.Message}");
+                return false;
+            }
         }
         // Phương thức tạo mã chức vụ 
         public string CreatePositionCode(string TenCV)
@@ -835,13 +853,20 @@ namespace Supermarket_System.Service
             return maCV;
         }
         // Phương thức thêm chức vụ 
-        public bool AddPosition(string TenCV)
+        public bool AddPosition(string TenCV, string MaBP)
         {
+
             var MaCV = CreatePositionCode(TenCV);
+            var bophan = _sqlConnectionServer.BoPhans.FirstOrDefault(BP => BP.MaBP == MaBP);
+            if(bophan != null)
+            {
+                return false;
+            }
             var newPostion = new ChucVu
             {
                 MaChucVu = MaCV,
-                TenChucVu = TenCV
+                TenChucVu = TenCV,
+                MaBP = MaBP
             };
             _sqlConnectionServer.ChucVus.Add(newPostion);
             return _sqlConnectionServer.SaveChanges() > 0;

@@ -1,6 +1,5 @@
-﻿
-@{
-    ViewBag.Title = "UpdateDepartmentName";
+﻿@{
+    ViewBag.Title = "DeleteDepartment";
 }
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
@@ -10,13 +9,13 @@
         bool isSessionActive = (bool)ViewBag.IsSessionActive;
     }
 *@
-<h2>CẬP NHẬT BỘ PHẬN</h2>
+<h2>XÓA BỘ PHẬN</h2>
 <form id="updateForm">
     <input type="text" id="maBP" placeholder="Nhập Mã Bộ Phận" />
     <button type="button" id="btnSearch">Tìm Kiếm</button>
     <br />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="~/Content/UpdateDepartmentName.css" />
+    <link rel="stylesheet" href="~/Content/DeleteDepartment.css" />
     <script>
         $("#btnSearch").click(function () {
             var maBP = $("#maBP").val().trim(); // Loại bỏ khoảng trắng
@@ -28,7 +27,7 @@
             console.log("Đang gửi yêu cầu với Mã Bộ Phận:", maBP);
 
             $.ajax({
-                url: "/Admin/GetByDepartmentID",
+                url: "/Admin/GetByDepartmentID",  // Giả sử đây là API tìm kiếm bộ phận theo mã
                 type: "GET",
                 data: { maBP: maBP },
                 success: function (response) {
@@ -37,11 +36,11 @@
                         $("#resultContainer").show();
                         $("#resultMaBP").text(response.maBP);
                         $("#resultTenBP").text(response.tenBP);
-                        $("#tenBP").prop("disabled", false);
+                        $("#btnDelete").prop("disabled", false);  // Hiện nút xóa
                     } else {
                         alert(response.message);
                         $("#resultContainer").hide();
-                        $("#tenBP").val("").prop("disabled", true);
+                        $("#btnDelete").prop("disabled", true);  // Ẩn nút xóa nếu không tìm thấy
                     }
                 },
                 error: function (xhr, status, error) {
@@ -50,8 +49,8 @@
                 }
             });
         });
-
     </script>
+
     <div id="resultContainer" style="margin-top: 20px; display: none;">
         <table border="1" style="width: 50%; text-align: center;">
             <thead>
@@ -69,42 +68,41 @@
             </tbody>
         </table>
         <br />
-        <label for="tenBP">Tên Bộ Phận Mới:</label>
-        <input type="text" id="tenBP" placeholder="Tên Bộ Phận Mới" disabled />
-        <button type="submit">Cập Nhật</button>
+        <button type="button" id="btnDelete" disabled>XÓA</button>  <!-- Nút xóa được disable cho đến khi tìm thấy bộ phận -->
     </div>
 </form>
-
-
 <script>
-    
 
-    $("#updateForm").submit(function (e) {
-        e.preventDefault();
+    // Thêm sự kiện cho nút xóa
+    $("#btnDelete").click(function () {
+        var maBP = $("#maBP").val().trim();  // Lấy mã bộ phận
 
-        var maBP = $("#resultMaBP").text().trim();
-        var tenBP = $("#tenBP").val().trim();
-
-        if (!maBP || !tenBP) {
-            alert("Vui lòng nhập đầy đủ thông tin.");
+        if (!maBP) {
+            alert("Vui lòng nhập mã bộ phận.");
             return;
         }
 
-        $.ajax({
-            url: "/Admin/UpdateDepartmentName",
-            type: "POST",
-            data: { maBP: maBP, TenBP: tenBP },
-            success: function (response) {
-                alert(response.message);
-                if (response.success) {
-                    $("#resultTenBP").text(tenBP);
-                    $("#tenBP").prop("disabled", true);
+        if (confirm("Bạn có chắc chắn muốn xóa bộ phận này không?")) {
+            $.ajax({
+                url: "/Admin/DeleteDepartment",  // Giả sử đây là Action trong Controller của bạn
+                type: "POST",
+                data: { maBP: maBP },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        // Sau khi xóa thành công, quay lại khung tìm kiếm
+                        $("#resultContainer").hide();  // Ẩn kết quả tìm kiếm
+                        $("#maBP").val("");  // Clear input
+                        $("#btnDelete").prop("disabled", true);  // Disable nút xóa
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Lỗi xảy ra khi xóa:", status, error);
+                    alert("Có lỗi xảy ra khi xóa bộ phận.");
                 }
-            },
-            error: function (xhr, status, error) {
-                console.error("Lỗi khi gọi API:", status, error);
-                alert("Có lỗi xảy ra khi cập nhật.");
-            }
-        });
+            });
+        }
     });
 </script>

@@ -1,0 +1,100 @@
+﻿/* Tạo kiểu cho phần tiêu đề */
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Kiểu cho form */
+form {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        font-size: 16px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    form input, form select {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+        form input:focus, form select:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    /* Nút bấm thêm */
+    form button {
+        background-color: #28a745;
+        color: white;
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        form button:hover {
+            background-color: #218838;
+        }
+
+/* Tạo kiểu cho bảng danh sách */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+    table th, table td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+
+    table th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    table tbody tr:hover {
+        background-color: #e9ecef;
+    }
+
+/* Cải tiến cho các thông báo lỗi và thành công */
+.alert {
+    padding: 15px;
+    margin-top: 20px;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+    .alert.success {
+        background-color: #28a745;
+    }
+
+    .alert.error {
+        background-color: #dc3545;
+    }

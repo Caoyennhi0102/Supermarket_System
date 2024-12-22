@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewBag.Title = "AddPosition";
+}
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";  // Đảm bảo đường dẫn đúng
+}
+@*
+    @{
+        bool isSessionActive = (bool)ViewBag.IsSessionActive;
+    }
+*@
+<h2>THÊM CHỨC VỤ</h2>
+<link rel="stylesheet" href="~/Content/AddPosition.css" />
+<form method="post" action="/Admin/AddPosition">
+    <div>
+        <label for="TenCV">Tên Chức Vụ</label>
+        <input type="text" id="TenCV" name="TenCV" required />
+    </div>
+
+    <div>
+        <label for="MaBP">Chọn Bộ Phận</label>
+        <select id="MaBP" name="MaBP" required>
+            @foreach (var boPhan in ViewBag.BoPhans)
+            {
+                <option value="@boPhan.MaBP">@boPhan.TenBoPhan</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit">Thêm Chức Vụ</button>
+</form>
+
+<h3>Danh Sách Chức Vụ</h3>
+
+<table border="1" style="width: 100%; text-align: center;">
+    <thead>
+        <tr>
+            <th>Mã Bộ Phận</th>
+            <th>Tên Bộ Phận</th>
+            <th>Mã Chức Vụ</th>
+            <th>Tên Chức Vụ</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var chucVu in ViewBag.listCV)
+        {
+            <tr>
+                <td>@chucVu.MaBP</td>
+                <td>@chucVu.TenBoPhan</td>
+                <td>@chucVu.MaChucVu</td>
+                <td>@chucVu.TenChucVu</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Bắt sự kiện submit form
+    $("#addPositionForm").submit(function (event) {
+        event.preventDefault(); // Ngừng việc submit form
+
+        var tenCV = $("#TenCV").val().trim();
+        var maBP = $("#MaBP").val();
+
+        // Kiểm tra dữ liệu đầu vào
+        if (!tenCV || !maBP) {
+            alert("Vui lòng nhập đầy đủ thông tin.");
+            return;
+        }
+        $.ajax({
+            url: "/Admin/AddPosition",
+            type: "POST",
+            data: {
+                TenCV: tenCV,
+                MaBP: maBP
+            },
+            success: function (response) {
+                if (response.success) {
+                    // Thêm dòng mới vào bảng sau khi thêm thành công
+                    var newRow = "<tr>" +
+                        "<td>" + maBP + "</td>" +
+                        "<td>" + response.tenBoPhan + "</td>" +  // response trả về tên bộ phận
+                        "<td>" + response.maChucVu + "</td>" +  // response trả về mã chức vụ
+                        "<td>" + tenCV + "</td>" +  // Tên chức vụ mới
+                        "</tr>";
+
+                    $("#positionTable tbody").append(newRow); // Thêm dòng vào bảng
+                    alert("Thêm chức vụ thành công!");
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Lỗi:", error);
+                alert("Có lỗi xảy ra.");
+            }
+        });
+    });
+</script>
+
